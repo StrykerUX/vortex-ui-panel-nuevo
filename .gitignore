@@ -1,0 +1,43 @@
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Archivos de IDE y editores
+/.idea
+/.vscode
+*.sublime-project
+*.sublime-workspace
+*.komodoproject
+.komodotools
+/.atom/
+/.vs/
+
+# Dependencias y paquetes
+/node_modules
+/vendor
+package-lock.json
+composer.lock
+
+# Archivos de configuración local
+.env
+wp-config.php
+config.php
+*.local.php
+
+# Directorios y archivos de compilación
+/dist
+/build
+/tmp
+*.log
+*.sql
+*.sqlite
+
+# Archivos de respaldo
+*~
+*.bak
+*.swp
+*.zip
+*.rar
+*.tar
+*.gz
