@@ -121,7 +121,7 @@ if (!defined('WPINC')) {
                 
                 <div id="menu-structure-container">
                     <ul id="menu-structure" class="menu-items-list">
-                        <?php $this->render_menu_items($menu_structure); ?>
+                        <?php render_menu_items($menu_structure); ?>
                     </ul>
                 </div>
                 
