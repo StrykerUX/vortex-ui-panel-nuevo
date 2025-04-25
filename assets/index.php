@@ -1,0 +1,2 @@
+<?php
+// Silencio es oro
