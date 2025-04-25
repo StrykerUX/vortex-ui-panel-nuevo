@@ -34,6 +34,8 @@ define('VORTEX_UI_PANEL_URL', plugin_dir_url(__FILE__));
  */
 require_once VORTEX_UI_PANEL_PATH . 'includes/class-vortex-menu-manager.php';
 require_once VORTEX_UI_PANEL_PATH . 'includes/class-vortex-admin-page.php';
+require_once VORTEX_UI_PANEL_PATH . 'includes/class-vortex-sidebar-renderer.php';
+require_once VORTEX_UI_PANEL_PATH . 'includes/class-vortex-tabler-icons.php';
 
 /**
  * Clase principal del plugin
@@ -56,20 +58,30 @@ class Vortex_UI_Panel {
     private $admin_page;
     
     /**
+     * Renderer del sidebar
+     */
+    private $sidebar_renderer;
+    
+    /**
      * Inicializa el plugin
      */
     private function __construct() {
         // Inicializar componentes
         $this->menu_manager = new Vortex_Menu_Manager();
         $this->admin_page = new Vortex_Admin_Page($this->menu_manager);
+        $this->sidebar_renderer = new Vortex_Sidebar_Renderer($this->menu_manager);
         
         // Registrar hooks
         add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_styles'));
+        add_action('wp_enqueue_scripts', array($this, 'enqueue_frontend_styles'));
         add_action('admin_menu', array($this->admin_page, 'register_menu_page'));
         
         // Filtros para modificar el sidebar del tema
         add_filter('wp_nav_menu_args', array($this->menu_manager, 'customize_sidebar_menu'), 10, 1);
         add_filter('get_custom_logo', array($this->menu_manager, 'customize_sidebar_logo'), 10, 1);
+        
+        // Acciones AJAX
+        add_action('wp_ajax_vortex_get_menu', array($this->menu_manager, 'ajax_get_menu'));
     }
     
     /**
@@ -95,11 +107,32 @@ class Vortex_UI_Panel {
         wp_enqueue_style('vortex-admin-styles', VORTEX_UI_PANEL_URL . 'assets/css/admin.css', array(), VORTEX_UI_PANEL_VERSION);
         wp_enqueue_script('vortex-admin-script', VORTEX_UI_PANEL_URL . 'assets/js/admin.js', array('jquery', 'jquery-ui-sortable'), VORTEX_UI_PANEL_VERSION, true);
         
+        // Cargar iconos de Tabler
+        Vortex_Tabler_Icons::enqueue_icons();
+        
+        // Cargar media uploader de WordPress
+        wp_enqueue_media();
+        
         // Pasar variables al script
         wp_localize_script('vortex-admin-script', 'vortexUIPanel', array(
             'ajaxUrl' => admin_url('admin-ajax.php'),
             'nonce' => wp_create_nonce('vortex_ui_panel_nonce')
         ));
+    }
+    
+    /**
+     * Registra los estilos para el frontend
+     */
+    public function enqueue_frontend_styles() {
+        // Cargar iconos de Tabler en el frontend
+        Vortex_Tabler_Icons::enqueue_icons();
+    }
+    
+    /**
+     * Devuelve el renderer del sidebar
+     */
+    public function get_sidebar_renderer() {
+        return $this->sidebar_renderer;
     }
     
     /**
