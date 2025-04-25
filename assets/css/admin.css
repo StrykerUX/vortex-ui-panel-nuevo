@@ -4,7 +4,7 @@
  * @package Vortex_UI_Panel
  */
 
-/* Estructura general */
+/* Estilos generales */
 .vortex-ui-panel-wrap {
     margin: 20px 0;
 }
@@ -53,6 +53,15 @@
 .form-group input,
 .form-group select {
     width: 100%;
+}
+
+.media-field {
+    display: flex;
+    gap: 5px;
+}
+
+.media-field input {
+    flex: 1;
 }
 
 .icon-selector {
@@ -220,6 +229,41 @@
     border-radius: 4px;
 }
 
+.menu-preview .side-nav {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.menu-preview .side-nav-item {
+    margin-bottom: 5px;
+}
+
+.menu-preview .side-nav-link {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    color: #ffffff;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.menu-preview .side-nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.menu-preview .menu-icon {
+    margin-right: 10px;
+}
+
+.menu-preview .side-nav-title {
+    color: #6c757d;
+    padding: 12px 20px 6px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
 /* Botones de acción */
 .menu-actions {
     margin-top: 20px;
@@ -227,7 +271,59 @@
     gap: 10px;
 }
 
-/* Media query para dispositivos móviles */
+/* Modo de eliminación */
+.delete-mode .menu-item {
+    border-color: #d63638;
+    background-color: #fef2f2;
+}
+
+/* Estilos para el modal de edición */
+.menu-edit-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.menu-edit-modal-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    max-width: 600px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.menu-edit-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.menu-edit-modal-close {
+    cursor: pointer;
+    font-size: 20px;
+    color: #666;
+}
+
+.menu-edit-modal-actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+/* Estilos Responsive */
 @media screen and (max-width: 782px) {
     .vortex-ui-panel-container {
         flex-direction: column;
@@ -236,5 +332,9 @@
     .vortex-ui-panel-sidebar,
     .vortex-ui-panel-content {
         width: 100%;
+    }
+    
+    .menu-edit-modal-content {
+        max-width: 90%;
     }
 }
