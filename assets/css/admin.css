@@ -1,0 +1,240 @@
+/**
+ * Estilos para la página de administración del plugin
+ *
+ * @package Vortex_UI_Panel
+ */
+
+/* Estructura general */
+.vortex-ui-panel-wrap {
+    margin: 20px 0;
+}
+
+.vortex-ui-panel-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.vortex-ui-panel-sidebar {
+    flex: 0 0 350px;
+}
+
+.vortex-ui-panel-content {
+    flex: 1;
+    min-width: 500px;
+}
+
+.vortex-panel-box {
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+    margin-bottom: 20px;
+    padding: 20px;
+}
+
+.vortex-panel-box h2 {
+    margin-top: 0;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #eee;
+}
+
+/* Formularios */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+}
+
+.icon-selector {
+    display: flex;
+    gap: 5px;
+}
+
+.icon-selector input {
+    flex: 1;
+}
+
+.icon-preview {
+    margin-top: 10px;
+    font-size: 24px;
+    height: 40px;
+    width: 40px;
+    border: 1px dashed #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo-preview {
+    margin-top: 10px;
+    max-width: 200px;
+}
+
+.logo-preview img {
+    max-width: 100%;
+    height: auto;
+}
+
+.role-selector {
+    max-height: 150px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 5px;
+}
+
+.role-item {
+    margin-bottom: 5px;
+}
+
+/* Biblioteca de iconos */
+.icon-search {
+    margin-bottom: 15px;
+}
+
+.icons-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+    gap: 10px;
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    padding: 10px;
+}
+
+.icon-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    border: 1px solid #f0f0f0;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+}
+
+.icon-item:hover {
+    background-color: #f0f0f0;
+    border-color: #007cba;
+}
+
+.icon-item i {
+    font-size: 24px;
+    margin-bottom: 5px;
+}
+
+.icon-item .icon-name {
+    font-size: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+/* Estructura del menú */
+.menu-items-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.menu-item {
+    margin-bottom: 5px;
+    border: 1px solid #ddd;
+    background: #f9f9f9;
+}
+
+.menu-item-header {
+    padding: 10px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: move;
+}
+
+.menu-item-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.menu-item-type {
+    font-size: 11px;
+    background: #e0e0e0;
+    padding: 2px 5px;
+    border-radius: 3px;
+    margin-left: 5px;
+}
+
+.menu-item-actions {
+    display: flex;
+    gap: 5px;
+}
+
+.button-edit,
+.button-delete {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    height: 20px;
+    width: 20px;
+}
+
+.button-edit .dashicons,
+.button-delete .dashicons {
+    font-size: 16px;
+}
+
+.button-edit:hover .dashicons {
+    color: #007cba;
+}
+
+.button-delete:hover .dashicons {
+    color: #d63638;
+}
+
+.submenu-items {
+    margin: 0 0 0 30px;
+    padding: 0;
+    list-style: none;
+}
+
+/* Vista previa */
+.menu-preview {
+    background-color: #1a1d21;
+    color: #fff;
+    padding: 20px;
+    border-radius: 4px;
+}
+
+/* Botones de acción */
+.menu-actions {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+}
+
+/* Media query para dispositivos móviles */
+@media screen and (max-width: 782px) {
+    .vortex-ui-panel-container {
+        flex-direction: column;
+    }
+    
+    .vortex-ui-panel-sidebar,
+    .vortex-ui-panel-content {
+        width: 100%;
+    }
+}

@@ -20,6 +20,22 @@ if (!defined('WPINC')) {
 define('VORTEX_UI_PANEL_VERSION', '0.1.0');
 
 /**
+ * Path al directorio del plugin
+ */
+define('VORTEX_UI_PANEL_PATH', plugin_dir_path(__FILE__));
+
+/**
+ * URL al directorio del plugin
+ */
+define('VORTEX_UI_PANEL_URL', plugin_dir_url(__FILE__));
+
+/**
+ * Carga las clases necesarias
+ */
+require_once VORTEX_UI_PANEL_PATH . 'includes/class-vortex-menu-manager.php';
+require_once VORTEX_UI_PANEL_PATH . 'includes/class-vortex-admin-page.php';
+
+/**
  * Clase principal del plugin
  */
 class Vortex_UI_Panel {
@@ -30,11 +46,30 @@ class Vortex_UI_Panel {
     private static $instance = null;
     
     /**
+     * Gestor del menú
+     */
+    private $menu_manager;
+    
+    /**
+     * Página de administración
+     */
+    private $admin_page;
+    
+    /**
      * Inicializa el plugin
      */
     private function __construct() {
-        // Acciones y filtros irán aquí
+        // Inicializar componentes
+        $this->menu_manager = new Vortex_Menu_Manager();
+        $this->admin_page = new Vortex_Admin_Page($this->menu_manager);
+        
+        // Registrar hooks
         add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_styles'));
+        add_action('admin_menu', array($this->admin_page, 'register_menu_page'));
+        
+        // Filtros para modificar el sidebar del tema
+        add_filter('wp_nav_menu_args', array($this->menu_manager, 'customize_sidebar_menu'), 10, 1);
+        add_filter('get_custom_logo', array($this->menu_manager, 'customize_sidebar_logo'), 10, 1);
     }
     
     /**
@@ -50,10 +85,41 @@ class Vortex_UI_Panel {
     /**
      * Registra los estilos del panel de administración
      */
-    public function enqueue_admin_styles() {
-        // Los estilos se añadirán aquí
+    public function enqueue_admin_styles($hook) {
+        // Solo cargar en la página del plugin
+        if (strpos($hook, 'vortex-ui-panel') === false) {
+            return;
+        }
+        
+        // Registrar y encolar estilos
+        wp_enqueue_style('vortex-admin-styles', VORTEX_UI_PANEL_URL . 'assets/css/admin.css', array(), VORTEX_UI_PANEL_VERSION);
+        wp_enqueue_script('vortex-admin-script', VORTEX_UI_PANEL_URL . 'assets/js/admin.js', array('jquery', 'jquery-ui-sortable'), VORTEX_UI_PANEL_VERSION, true);
+        
+        // Pasar variables al script
+        wp_localize_script('vortex-admin-script', 'vortexUIPanel', array(
+            'ajaxUrl' => admin_url('admin-ajax.php'),
+            'nonce' => wp_create_nonce('vortex_ui_panel_nonce')
+        ));
+    }
+    
+    /**
+     * Activación del plugin
+     */
+    public static function activate() {
+        // Código de activación
+    }
+    
+    /**
+     * Desactivación del plugin
+     */
+    public static function deactivate() {
+        // Código de desactivación
     }
 }
+
+// Hooks de activación y desactivación
+register_activation_hook(__FILE__, array('Vortex_UI_Panel', 'activate'));
+register_deactivation_hook(__FILE__, array('Vortex_UI_Panel', 'deactivate'));
 
 // Iniciar el plugin
 function run_vortex_ui_panel() {
