@@ -138,8 +138,55 @@
         css += '.vortex-theme-preview { font-family: var(--body-font-family, "Inter", sans-serif); }\n';
         css += '.preview-card { background-color: var(--card-bg, #fff); border-color: var(--card-border, #dee2e6); }\n';
         
+        // Añadir estilos para los botones 3D
+        css += updateButtonStyles();
+        
         // Actualizar el contenido del elemento de estilo
         styleElement.text(css);
+    }
+    
+    /**
+     * Generar estilos para los botones 3D
+     */
+    function updateButtonStyles() {
+        let css = '';
+        
+        // Variables de los botones 3D
+        const frontBgColor = customVars['front-bg-color'] || '#4F46E5';
+        const frontTextColor = customVars['front-text-color'] || '#ffffff';
+        const backBorderColor = customVars['back-border-color'] || '#3730a3';
+        const secondaryFrontBgColor = customVars['secondary-front-bg-color'] || '#8B5CF6';
+        const secondaryBackBorderColor = customVars['secondary-back-border-color'] || '#6D28D9';
+        const borderRadius = customVars['border-radius'] || '4px';
+        const offset = customVars['offset'] || '4px';
+        const hoverOffset = customVars['hover-offset'] || '3px';
+        
+        // Aplicar variables CSS personalizadas
+        css += ':root {\n';
+        css += '    --front-bg-color: ' + frontBgColor + ';\n';
+        css += '    --front-text-color: ' + frontTextColor + ';\n';
+        css += '    --back-border-color: ' + backBorderColor + ';\n';
+        css += '    --secondary-front-bg-color: ' + secondaryFrontBgColor + ';\n';
+        css += '    --secondary-back-border-color: ' + secondaryBackBorderColor + ';\n';
+        css += '    --border-radius: ' + borderRadius + ';\n';
+        css += '    --offset: ' + offset + ';\n';
+        css += '    --hover-offset: ' + hoverOffset + ';\n';
+        css += '}\n\n';
+        
+        // Actualizar estilos específicos para los botones
+        css += '.btn-wrapper.primary .btn { background-color: ' + frontBgColor + '; color: ' + frontTextColor + '; }\n';
+        css += '.btn-wrapper.primary .btn-back { border-color: ' + backBorderColor + '; }\n';
+        css += '.btn-wrapper.secondary .btn { background-color: ' + secondaryFrontBgColor + '; color: ' + frontTextColor + '; }\n';
+        css += '.btn-wrapper.secondary .btn-back { border-color: ' + secondaryBackBorderColor + '; }\n';
+        css += '.btn { border-radius: ' + borderRadius + '; }\n';
+        css += '.btn-back { border-radius: ' + borderRadius + '; }\n';
+        css += '.btn-icon { color: ' + frontTextColor + '; }\n';
+        
+        // Actualizar los botones de acción (guardar y restablecer)
+        css += '.button-3d-wrapper.primary .button-3d { background-color: ' + frontBgColor + '; }\n';
+        css += '.button-3d-wrapper.primary .button-3d-back { border-color: ' + backBorderColor + '; }\n';
+        
+        return css;
     }
     
     /**
