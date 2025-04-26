@@ -3,7 +3,7 @@
  * Plugin Name: Vortex UI Panel
  * Plugin URI: https://github.com/StrykerUX/vortex-ui-panel-nuevo
  * Description: Plugin de WordPress para crear paneles de administración personalizados con un menú lateral estilo SaaS moderno.
- * Version: 0.1.2
+ * Version: 0.1.3
  * Author: StrykerUX
  * Text Domain: vortex-ui-panel
  * Domain Path: /languages
@@ -17,7 +17,7 @@ if (!defined('WPINC')) {
 /**
  * Versión actual del plugin.
  */
-define('VORTEX_UI_PANEL_VERSION', '0.1.2');
+define('VORTEX_UI_PANEL_VERSION', '0.1.3');
 
 /**
  * Path al directorio del plugin
@@ -74,7 +74,8 @@ class Vortex_UI_Panel {
     private function __construct() {
         // Inicializar componentes
         $this->menu_manager = new Vortex_Menu_Manager();
-        $this->admin_page = new Vortex_Admin_Page($this->menu_manager, $this->get_theme_customizer());
+        $this->theme_customizer = Vortex_Theme_Customizer::get_instance();
+        $this->admin_page = new Vortex_Admin_Page($this->menu_manager, $this->theme_customizer);
         $this->sidebar_renderer = new Vortex_Sidebar_Renderer($this->menu_manager);
         
         // Registrar hooks
@@ -104,9 +105,6 @@ class Vortex_UI_Panel {
      * Inicializa el personalizador de estilos del tema
      */
     public function get_theme_customizer() {
-        if (null === $this->theme_customizer) {
-            $this->theme_customizer = Vortex_Theme_Customizer::get_instance();
-        }
         return $this->theme_customizer;
     }
     
