@@ -3,7 +3,7 @@
  * Plugin Name: Vortex UI Panel
  * Plugin URI: https://github.com/StrykerUX/vortex-ui-panel-nuevo
  * Description: Plugin de WordPress para crear paneles de administración personalizados con un menú lateral estilo SaaS moderno.
- * Version: 0.1.3
+ * Version: 0.3.0
  * Author: StrykerUX
  * Text Domain: vortex-ui-panel
  * Domain Path: /languages
@@ -17,7 +17,7 @@ if (!defined('WPINC')) {
 /**
  * Versión actual del plugin.
  */
-define('VORTEX_UI_PANEL_VERSION', '0.1.3');
+define('VORTEX_UI_PANEL_VERSION', '0.3.0');
 
 /**
  * Path al directorio del plugin
