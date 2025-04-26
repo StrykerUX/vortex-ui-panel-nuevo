@@ -17,27 +17,35 @@
         $('.vortex-color-picker').wpColorPicker({
             change: function(event, ui) {
                 const $input = $(this);
-                const varName = $input.attr('name').match(/variables\[(.*?)\]/)[1];
+                const varNameMatch = $input.attr('name').match(/variables\[(.*?)\]/);
                 
-                // Actualizar variable en tiempo real
-                customVars[varName] = ui.color.toString();
-                
-                // Actualizar previsualización con retraso para evitar actualizaciones frecuentes
-                clearTimeout(previewUpdateTimeout);
-                previewUpdateTimeout = setTimeout(updatePreview, 300);
+                if (varNameMatch && varNameMatch[1]) {
+                    const varName = varNameMatch[1];
+                    
+                    // Actualizar variable en tiempo real
+                    customVars[varName] = ui.color.toString();
+                    
+                    // Actualizar previsualización con retraso para evitar actualizaciones frecuentes
+                    clearTimeout(previewUpdateTimeout);
+                    previewUpdateTimeout = setTimeout(updatePreview, 300);
+                }
             }
         });
         
         // Manejar cambios en los campos de texto
         $('.vortex-text-input, .vortex-select').on('change', function() {
             const $input = $(this);
-            const varName = $input.attr('name').match(/variables\[(.*?)\]/)[1];
+            const varNameMatch = $input.attr('name').match(/variables\[(.*?)\]/);
             
-            // Actualizar variable en tiempo real
-            customVars[varName] = $input.val();
-            
-            // Actualizar previsualización
-            updatePreview();
+            if (varNameMatch && varNameMatch[1]) {
+                const varName = varNameMatch[1];
+                
+                // Actualizar variable en tiempo real
+                customVars[varName] = $input.val();
+                
+                // Actualizar previsualización
+                updatePreview();
+            }
         });
         
         // Manejar evento de guardar estilos
@@ -66,7 +74,7 @@
         // Recopilar todas las variables de los campos
         $('#vortex-theme-styles-form').find('input, select').each(function() {
             const $input = $(this);
-            const nameMatch = $input.attr('name').match(/variables\[(.*?)\]/);
+            const nameMatch = $input.attr('name') ? $input.attr('name').match(/variables\[(.*?)\]/) : null;
             
             if (nameMatch && nameMatch[1]) {
                 const varName = nameMatch[1];
@@ -143,8 +151,13 @@
         const originalText = $saveButton.text();
         $saveButton.text('Guardando...').prop('disabled', true);
         
-        // Recopilar todos los valores del formulario
-        const formData = $('#vortex-theme-styles-form').serialize();
+        // Verificar si tenemos las variables necesarias
+        if (!vortexThemeCustomizer || !vortexThemeCustomizer.ajaxUrl || !vortexThemeCustomizer.nonce) {
+            console.error('Error: Variables de personalización no disponibles');
+            $saveButton.text(originalText).prop('disabled', false);
+            showNotice('error', 'Error: No se pudieron guardar los estilos. Variables de personalización no disponibles.');
+            return;
+        }
         
         // Enviar solicitud AJAX
         $.ajax({
@@ -161,12 +174,13 @@
                     showNotice('success', 'Estilos guardados correctamente. Refresca las páginas del sitio para ver los cambios.');
                 } else {
                     // Mostrar mensaje de error
-                    showNotice('error', 'Error al guardar los estilos: ' + response.data);
+                    showNotice('error', 'Error al guardar los estilos: ' + (response.data || 'Error desconocido'));
                 }
             },
-            error: function() {
+            error: function(xhr, status, error) {
                 // Mostrar mensaje de error
-                showNotice('error', 'Error de conexión al guardar los estilos.');
+                console.error('Error AJAX:', status, error);
+                showNotice('error', 'Error de conexión al guardar los estilos: ' + error);
             },
             complete: function() {
                 // Restaurar botón
@@ -183,6 +197,14 @@
         const $resetButton = $('#vortex-reset-styles');
         const originalText = $resetButton.text();
         $resetButton.text('Restableciendo...').prop('disabled', true);
+        
+        // Verificar si tenemos las variables necesarias
+        if (!vortexThemeCustomizer || !vortexThemeCustomizer.ajaxUrl || !vortexThemeCustomizer.nonce) {
+            console.error('Error: Variables de personalización no disponibles');
+            $resetButton.text(originalText).prop('disabled', false);
+            showNotice('error', 'Error: No se pudieron restablecer los estilos. Variables de personalización no disponibles.');
+            return;
+        }
         
         // Enviar solicitud AJAX
         $.ajax({
@@ -203,13 +225,14 @@
                     }, 1500);
                 } else {
                     // Mostrar mensaje de error
-                    showNotice('error', 'Error al restablecer los estilos: ' + response.data);
+                    showNotice('error', 'Error al restablecer los estilos: ' + (response.data || 'Error desconocido'));
                     $resetButton.text(originalText).prop('disabled', false);
                 }
             },
-            error: function() {
+            error: function(xhr, status, error) {
                 // Mostrar mensaje de error
-                showNotice('error', 'Error de conexión al restablecer los estilos.');
+                console.error('Error AJAX:', status, error);
+                showNotice('error', 'Error de conexión al restablecer los estilos: ' + error);
                 $resetButton.text(originalText).prop('disabled', false);
             }
         });
