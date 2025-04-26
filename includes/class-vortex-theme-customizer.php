@@ -366,4 +366,11 @@ class Vortex_Theme_Customizer {
     public function get_available_fonts() {
         return $this->available_fonts;
     }
+    
+    /**
+     * Obtener las variables por defecto
+     */
+    public function get_default_variables() {
+        return $this->default_variables;
+    }
 }
