@@ -1,259 +1,353 @@
 /**
- * JavaScript para la página del personalizador de estilos del tema
+ * Script para el Sistema de Personalización Avanzado
+ * 
+ * Permite personalizar los estilos del tema de manera coherente
+ * y con una vista previa en tiempo real.
  */
+
 (function($) {
     'use strict';
     
-    // Variables para la previsualización en vivo
-    let previewUpdateTimeout;
-    let customVars = {};
-    
-    // Inicializar cuando el DOM esté listo
-    $(document).ready(function() {
-        // Inicializar tabs
-        $('#vortex-theme-styles-tabs').tabs();
-        
-        // Inicializar color pickers
-        $('.vortex-color-picker').wpColorPicker({
-            change: function(event, ui) {
-                const $input = $(this);
-                const varNameMatch = $input.attr('name').match(/variables\[(.*?)\]/);
-                
-                if (varNameMatch && varNameMatch[1]) {
-                    const varName = varNameMatch[1];
-                    
-                    // Actualizar variable en tiempo real
-                    customVars[varName] = ui.color.toString();
-                    
-                    // Actualizar previsualización con retraso para evitar actualizaciones frecuentes
-                    clearTimeout(previewUpdateTimeout);
-                    previewUpdateTimeout = setTimeout(updatePreview, 300);
-                }
-            }
-        });
-        
-        // Manejar cambios en los campos de texto
-        $('.vortex-text-input, .vortex-select').on('change', function() {
-            const $input = $(this);
-            const varNameMatch = $input.attr('name').match(/variables\[(.*?)\]/);
-            
-            if (varNameMatch && varNameMatch[1]) {
-                const varName = varNameMatch[1];
-                
-                // Actualizar variable en tiempo real
-                customVars[varName] = $input.val();
-                
-                // Actualizar previsualización
-                updatePreview();
-            }
-        });
-        
-        // Manejar evento de guardar estilos
-        $('#vortex-save-styles').on('click', function(e) {
-            e.preventDefault();
-            saveThemeStyles();
-        });
-        
-        // Manejar evento de resetear estilos
-        $('#vortex-reset-styles').on('click', function(e) {
-            e.preventDefault();
-            
-            if (confirm('¿Estás seguro de que deseas restablecer todos los estilos a los valores por defecto? Esta acción no se puede deshacer.')) {
-                resetThemeStyles();
-            }
-        });
-        
-        // Inicializar la previsualización
-        initializePreview();
-    });
+    // Elementos del DOM
+    const $form = $('#vortex-theme-styles-form');
+    const $preview = $('.vortex-theme-preview');
+    const $saveButton = $('#vortex-save-styles');
+    const $resetButton = $('#vortex-reset-styles');
+    const $tabs = $('#vortex-theme-styles-tabs');
+    const $presetItems = $('.vortex-preset-item');
+    const $colorPickers = $('.vortex-color-picker');
+    const $generateVariantsButtons = $('.vortex-generate-variants');
+    const $previewModeButtons = $('.vortex-preview-mode-btn');
+    const $previewDeviceButtons = $('.vortex-preview-device-btn');
+    const $notice = $('.vortex-notice');
+    const $fontSelects = $('.vortex-select');
+    const $collapsibleHeaders = $('.vortex-panel-collapsible-header');
     
     /**
-     * Inicializar la previsualización con los valores actuales
+     * Inicialización
      */
-    function initializePreview() {
-        // Recopilar todas las variables de los campos
-        $('#vortex-theme-styles-form').find('input, select').each(function() {
-            const $input = $(this);
-            const nameMatch = $input.attr('name') ? $input.attr('name').match(/variables\[(.*?)\]/) : null;
-            
-            if (nameMatch && nameMatch[1]) {
-                const varName = nameMatch[1];
-                
-                // Si es un color-picker, obtenemos el valor del campo oculto
-                if ($input.hasClass('vortex-color-picker')) {
-                    customVars[varName] = $input.val();
-                } else {
-                    customVars[varName] = $input.val();
-                }
-            }
-        });
+    function init() {
+        // Inicializar tabs
+        $tabs.tabs();
         
-        // Actualizar la previsualización inicial
+        // Inicializar color pickers
+        initColorPickers();
+        
+        // Inicializar sliders
+        initSliders();
+        
+        // Eventos
+        bindEvents();
+        
+        // Colapsar/expandir paneles
+        initCollapsiblePanels();
+        
+        // Vista previa inicial
         updatePreview();
     }
     
     /**
-     * Actualizar la previsualización con las variables actuales
+     * Inicializar selectores de color
      */
-    function updatePreview() {
-        let styleElement = $('#vortex-preview-styles');
-        
-        // Crear elemento de estilo si no existe
-        if (styleElement.length === 0) {
-            styleElement = $('<style id="vortex-preview-styles"></style>').appendTo('head');
-        }
-        
-        // Construir CSS con las variables personalizadas
-        let css = '.vortex-theme-preview {\n';
-        
-        // Transformar nombres de variables para la previsualización
-        Object.keys(customVars).forEach(function(varName) {
-            const value = customVars[varName];
-            
-            // Transformar nombres de variables de bs-* a nombres simples para la previsualización
-            if (varName === 'bs-primary') {
-                css += '    --primary-color: ' + value + ';\n';
-            } else if (varName === 'bs-secondary') {
-                css += '    --secondary-color: ' + value + ';\n';
-            } else if (varName === 'bs-body-font-family') {
-                css += '    --body-font-family: ' + value + ';\n';
-            } else if (varName === 'bs-body-color') {
-                css += '    --body-color: ' + value + ';\n';
-            } else if (varName === 'bs-body-bg') {
-                css += '    --body-bg: ' + value + ';\n';
-            } else if (varName === 'bs-card-bg') {
-                css += '    --card-bg: ' + value + ';\n';
-            } else if (varName === 'bs-card-border-color') {
-                css += '    --card-border: ' + value + ';\n';
-            }
+    function initColorPickers() {
+        $colorPickers.each(function() {
+            $(this).wpColorPicker({
+                defaultColor: $(this).data('default-color'),
+                change: function(event, ui) {
+                    // Actualizar vista previa cuando cambia el color
+                    updatePreview();
+                }
+            });
         });
-        
-        css += '}\n\n';
-        
-        // Aplicar las variables a elementos específicos de la previsualización
-        css += '.preview-header { background-color: var(--primary-color, #4F46E5); }\n';
-        css += '.preview-button.primary { background-color: var(--primary-color, #4F46E5); border-color: var(--primary-color, #4F46E5); }\n';
-        css += '.preview-button.secondary { background-color: var(--secondary-color, #8B5CF6); border-color: var(--secondary-color, #8B5CF6); }\n';
-        css += '.preview-menu-item.active { color: var(--primary-color, #4F46E5); background-color: rgba(var(--primary-rgb, 79, 70, 229), 0.1); }\n';
-        css += '.vortex-theme-preview { font-family: var(--body-font-family, "Inter", sans-serif); }\n';
-        css += '.preview-card { background-color: var(--card-bg, #fff); border-color: var(--card-border, #dee2e6); }\n';
-        
-        // Añadir estilos para los botones 3D
-        css += updateButtonStyles();
-        
-        // Actualizar el contenido del elemento de estilo
-        styleElement.text(css);
     }
     
     /**
-     * Generar estilos para los botones 3D
+     * Inicializar sliders para dimensiones
      */
-    function updateButtonStyles() {
-        let css = '';
+    function initSliders() {
+        $('.vortex-slider').each(function() {
+            const $slider = $(this);
+            const $input = $('#' + $slider.data('input-id'));
+            const $valueDisplay = $slider.siblings('.vortex-slider-value');
+            const min = parseInt($slider.data('min')) || 0;
+            const max = parseInt($slider.data('max')) || 100;
+            const step = parseFloat($slider.data('step')) || 1;
+            const value = parseInt($slider.data('value')) || 0;
+            const unit = $slider.data('unit') || 'px';
+            
+            $slider.slider({
+                range: 'min',
+                min: min,
+                max: max,
+                step: step,
+                value: value,
+                slide: function(event, ui) {
+                    const displayValue = ui.value + unit;
+                    $input.val(displayValue);
+                    $valueDisplay.text(displayValue);
+                    
+                    // Actualizar vista previa
+                    updatePreview();
+                }
+            });
+        });
         
-        // Variables de los botones 3D
-        const frontBgColor = customVars['front-bg-color'] || '#4F46E5';
-        const frontTextColor = customVars['front-text-color'] || '#ffffff';
-        const backBorderColor = customVars['back-border-color'] || '#3730a3';
-        const secondaryFrontBgColor = customVars['secondary-front-bg-color'] || '#8B5CF6';
-        const secondaryBackBorderColor = customVars['secondary-back-border-color'] || '#6D28D9';
-        const borderRadius = customVars['border-radius'] || '4px';
-        const offset = customVars['offset'] || '4px';
-        const hoverOffset = customVars['hover-offset'] || '3px';
+        // Sincronizar input manual con slider
+        $('.vortex-dimension-input').on('input', function() {
+            const $input = $(this);
+            const value = parseInt($input.val()) || 0;
+            const $slider = $('.vortex-slider[data-input-id="' + $input.attr('id') + '"]');
+            
+            if ($slider.length) {
+                $slider.slider('value', value);
+                $slider.siblings('.vortex-slider-value').text($input.val());
+            }
+            
+            // Actualizar vista previa
+            updatePreview();
+        });
+    }
+    
+    /**
+     * Asociar eventos a los elementos
+     */
+    function bindEvents() {
+        // Guardar cambios
+        $saveButton.on('click', saveStyles);
         
-        // Aplicar variables CSS personalizadas
-        css += ':root {\n';
-        css += '    --front-bg-color: ' + frontBgColor + ';\n';
-        css += '    --front-text-color: ' + frontTextColor + ';\n';
-        css += '    --back-border-color: ' + backBorderColor + ';\n';
-        css += '    --secondary-front-bg-color: ' + secondaryFrontBgColor + ';\n';
-        css += '    --secondary-back-border-color: ' + secondaryBackBorderColor + ';\n';
-        css += '    --border-radius: ' + borderRadius + ';\n';
-        css += '    --offset: ' + offset + ';\n';
-        css += '    --hover-offset: ' + hoverOffset + ';\n';
-        css += '}\n\n';
+        // Restablecer valores por defecto
+        $resetButton.on('click', resetStyles);
         
-        // Actualizar estilos específicos para los botones
-        css += '.btn-wrapper.primary .btn { background-color: ' + frontBgColor + '; color: ' + frontTextColor + '; }\n';
-        css += '.btn-wrapper.primary .btn-back { border-color: ' + backBorderColor + '; }\n';
-        css += '.btn-wrapper.secondary .btn { background-color: ' + secondaryFrontBgColor + '; color: ' + frontTextColor + '; }\n';
-        css += '.btn-wrapper.secondary .btn-back { border-color: ' + secondaryBackBorderColor + '; }\n';
-        css += '.btn { border-radius: ' + borderRadius + '; }\n';
-        css += '.btn-back { border-radius: ' + borderRadius + '; }\n';
-        css += '.btn-icon { color: ' + frontTextColor + '; }\n';
+        // Aplicar preset
+        $('.vortex-apply-preset').on('click', function(e) {
+            e.preventDefault();
+            const preset = $(this).closest('.vortex-preset-item').data('preset');
+            applyPreset(preset);
+        });
         
-        // Actualizar los botones de acción (guardar y restablecer)
-        css += '.button-3d-wrapper.primary .button-3d { background-color: ' + frontBgColor + '; }\n';
-        css += '.button-3d-wrapper.primary .button-3d-back { border-color: ' + backBorderColor + '; }\n';
+        // Generar variantes de color
+        $generateVariantsButtons.on('click', function(e) {
+            e.preventDefault();
+            const variableName = $(this).data('variable');
+            const colorInput = $('#var-' + variableName);
+            const color = colorInput.val();
+            
+            generateColorVariants(color, variableName);
+        });
         
-        return css;
+        // Cambiar modo de previsualización (claro/oscuro)
+        $previewModeButtons.on('click', function() {
+            $previewModeButtons.removeClass('active');
+            $(this).addClass('active');
+            const mode = $(this).data('mode');
+            $preview.attr('data-theme-mode', mode);
+        });
+        
+        // Cambiar dispositivo de previsualización
+        $previewDeviceButtons.on('click', function() {
+            $previewDeviceButtons.removeClass('active');
+            $(this).addClass('active');
+            const device = $(this).data('device');
+            $preview.attr('data-device', device);
+        });
+        
+        // Cerrar notificaciones
+        $notice.find('.notice-dismiss').on('click', function() {
+            $(this).parent().addClass('hidden');
+        });
+        
+        // Cambio de fuente
+        $fontSelects.on('change', function() {
+            const fontFamily = $(this).val();
+            $(this).siblings('.vortex-font-preview').css('font-family', fontFamily);
+            updatePreview();
+        });
+        
+        // Actualizar vista previa con cualquier cambio de formulario
+        $form.find('input, select').on('change', updatePreview);
+    }
+    
+    /**
+     * Inicializar paneles colapsables
+     */
+    function initCollapsiblePanels() {
+        $collapsibleHeaders.on('click', function() {
+            const $panel = $(this).parent();
+            $panel.toggleClass('open');
+        });
+    }
+    
+    /**
+     * Actualizar vista previa del tema
+     */
+    function updatePreview() {
+        // Recopilar todas las variables y sus valores actuales
+        const variables = collectFormVariables();
+        
+        // Aplicar estilos a la vista previa
+        updatePreviewStyles(variables);
+    }
+    
+    /**
+     * Recopilar todas las variables del formulario
+     */
+    function collectFormVariables() {
+        const variables = {};
+        $form.find('input, select').each(function() {
+            const $input = $(this);
+            const name = $input.attr('name');
+            
+            if (name && name.startsWith('variables[') && name.endsWith(']')) {
+                // Extraer el nombre de la variable
+                const key = name.replace('variables[', '').replace(']', '');
+                variables[key] = $input.val();
+            }
+        });
+        
+        return variables;
+    }
+    
+    /**
+     * Actualizar los estilos de la vista previa
+     */
+    function updatePreviewStyles(variables) {
+        // Actualizar colores
+        if (variables['bs-primary']) {
+            updateButtonColors('primary', variables['bs-primary'], variables['bs-primary-dark'] || generateDarkerShade(variables['bs-primary'], 20));
+        }
+        
+        if (variables['bs-secondary']) {
+            updateButtonColors('secondary', variables['bs-secondary'], variables['bs-secondary-dark'] || generateDarkerShade(variables['bs-secondary'], 20));
+        }
+        
+        if (variables['bs-success']) {
+            updateButtonColors('success', variables['bs-success'], variables['bs-success-dark'] || generateDarkerShade(variables['bs-success'], 20));
+        }
+        
+        if (variables['bs-danger']) {
+            updateButtonColors('danger', variables['bs-danger'], variables['bs-danger-dark'] || generateDarkerShade(variables['bs-danger'], 20));
+        }
+        
+        if (variables['bs-warning']) {
+            updateButtonColors('warning', variables['bs-warning'], variables['bs-warning-dark'] || generateDarkerShade(variables['bs-warning'], 20));
+        }
+        
+        if (variables['bs-info']) {
+            updateButtonColors('info', variables['bs-info'], variables['bs-info-dark'] || generateDarkerShade(variables['bs-info'], 20));
+        }
+        
+        // Actualizar cabecera y menú lateral
+        if (variables['bs-primary']) {
+            $('.preview-header').css('background-color', variables['bs-primary']);
+        }
+        
+        // Actualizar efectos 3D para botones
+        if (variables['button-3d-offset']) {
+            updateButtonOffset(variables['button-3d-offset'], variables['button-3d-hover-offset'] || '3px');
+        }
+        
+        // Actualizar radio de borde para botones
+        if (variables['button-border-radius']) {
+            $('.btn-3d, .btn-3d-back, .preview-button').css('border-radius', variables['button-border-radius']);
+        }
+        
+        // Actualizar tipografía
+        if (variables['bs-body-font-family']) {
+            $preview.css('font-family', variables['bs-body-font-family']);
+        }
+    }
+    
+    /**
+     * Actualizar colores de botones
+     */
+    function updateButtonColors(type, backgroundColor, borderColor) {
+        // Actualizar botones estándar
+        $('.preview-button.' + type).css('background-color', backgroundColor);
+        
+        // Actualizar botones 3D
+        $('.btn-3d-wrapper.' + type + ' .btn-3d').css('background-color', backgroundColor);
+        $('.btn-3d-wrapper.' + type + ' .btn-3d-back').css('border-color', borderColor);
+    }
+    
+    /**
+     * Actualizar desplazamiento de botones 3D
+     */
+    function updateButtonOffset(offset, hoverOffset) {
+        // Actualizar la posición del fondo del botón
+        $('.btn-3d-back').css({
+            'top': offset,
+            'left': offset
+        });
+        
+        // Actualizar efecto hover
+        // Eliminamos los estilos inline previos
+        $('.vortex-theme-preview').find('style').remove();
+        
+        // Añadimos los nuevos estilos
+        $('<style>')
+            .prop('type', 'text/css')
+            .html(`
+                .btn-3d-wrapper:hover .btn-3d {
+                    transform: translate(${hoverOffset}, ${hoverOffset});
+                }
+                .btn-3d-wrapper:active .btn-3d {
+                    transform: translate(${offset}, ${offset});
+                }
+            `)
+            .appendTo('.vortex-theme-preview');
     }
     
     /**
      * Guardar los estilos personalizados
      */
-    function saveThemeStyles() {
+    function saveStyles(e) {
+        e.preventDefault();
+        
+        // Obtener todos los valores del formulario
+        const variables = collectFormVariables();
+        
         // Mostrar indicador de carga
-        const $saveButton = $('#vortex-save-styles');
-        const originalText = $saveButton.text();
-        $saveButton.text('Guardando...').prop('disabled', true);
+        $saveButton.prop('disabled', true).text('Guardando...');
         
-        // Verificar si tenemos las variables necesarias
-        if (!vortexThemeCustomizer || !vortexThemeCustomizer.ajaxUrl || !vortexThemeCustomizer.nonce) {
-            console.error('Error: Variables de personalización no disponibles');
-            $saveButton.text(originalText).prop('disabled', false);
-            showNotice('error', 'Error: No se pudieron guardar los estilos. Variables de personalización no disponibles.');
-            return;
-        }
-        
-        // Enviar solicitud AJAX
+        // Enviar datos por AJAX
         $.ajax({
             url: vortexThemeCustomizer.ajaxUrl,
             type: 'POST',
             data: {
                 action: 'vortex_save_theme_styles',
                 nonce: vortexThemeCustomizer.nonce,
-                variables: customVars
+                variables: variables
             },
             success: function(response) {
                 if (response.success) {
-                    // Mostrar mensaje de éxito
-                    showNotice('success', 'Estilos guardados correctamente. Refresca las páginas del sitio para ver los cambios.');
+                    showNotice('success', 'Estilos guardados correctamente. Los cambios se han aplicado a todo el sitio.');
                 } else {
-                    // Mostrar mensaje de error
-                    showNotice('error', 'Error al guardar los estilos: ' + (response.data || 'Error desconocido'));
+                    showNotice('error', 'Error al guardar los estilos. Por favor, inténtalo de nuevo.');
                 }
             },
-            error: function(xhr, status, error) {
-                // Mostrar mensaje de error
-                console.error('Error AJAX:', status, error);
-                showNotice('error', 'Error de conexión al guardar los estilos: ' + error);
+            error: function() {
+                showNotice('error', 'Error de conexión. Por favor, inténtalo de nuevo.');
             },
             complete: function() {
-                // Restaurar botón
-                $saveButton.text(originalText).prop('disabled', false);
+                $saveButton.prop('disabled', false).html('<i class="ti ti-device-floppy"></i> Guardar cambios');
             }
         });
     }
     
     /**
-     * Resetear los estilos a valores por defecto
+     * Restablecer los estilos a los valores por defecto
      */
-    function resetThemeStyles() {
-        // Mostrar indicador de carga
-        const $resetButton = $('#vortex-reset-styles');
-        const originalText = $resetButton.text();
-        $resetButton.text('Restableciendo...').prop('disabled', true);
+    function resetStyles(e) {
+        e.preventDefault();
         
-        // Verificar si tenemos las variables necesarias
-        if (!vortexThemeCustomizer || !vortexThemeCustomizer.ajaxUrl || !vortexThemeCustomizer.nonce) {
-            console.error('Error: Variables de personalización no disponibles');
-            $resetButton.text(originalText).prop('disabled', false);
-            showNotice('error', 'Error: No se pudieron restablecer los estilos. Variables de personalización no disponibles.');
+        if (!confirm('¿Estás seguro de que quieres restablecer todos los estilos a los valores por defecto? Esta acción no se puede deshacer.')) {
             return;
         }
         
-        // Enviar solicitud AJAX
+        // Mostrar indicador de carga
+        $resetButton.prop('disabled', true).text('Restableciendo...');
+        
+        // Enviar datos por AJAX
         $.ajax({
             url: vortexThemeCustomizer.ajaxUrl,
             type: 'POST',
@@ -263,56 +357,220 @@
             },
             success: function(response) {
                 if (response.success) {
-                    // Mostrar mensaje de éxito
-                    showNotice('success', 'Estilos restablecidos correctamente. La página se recargará para mostrar los cambios.');
+                    showNotice('success', 'Estilos restablecidos a los valores por defecto.');
                     
-                    // Recargar la página después de un breve retraso
+                    // Recargar la página para mostrar los valores por defecto
                     setTimeout(function() {
-                        location.reload();
-                    }, 1500);
+                        window.location.reload();
+                    }, 1000);
                 } else {
-                    // Mostrar mensaje de error
-                    showNotice('error', 'Error al restablecer los estilos: ' + (response.data || 'Error desconocido'));
-                    $resetButton.text(originalText).prop('disabled', false);
+                    showNotice('error', 'Error al restablecer los estilos. Por favor, inténtalo de nuevo.');
+                    $resetButton.prop('disabled', false).html('<i class="ti ti-refresh"></i> Restablecer valores');
                 }
             },
-            error: function(xhr, status, error) {
-                // Mostrar mensaje de error
-                console.error('Error AJAX:', status, error);
-                showNotice('error', 'Error de conexión al restablecer los estilos: ' + error);
-                $resetButton.text(originalText).prop('disabled', false);
+            error: function() {
+                showNotice('error', 'Error de conexión. Por favor, inténtalo de nuevo.');
+                $resetButton.prop('disabled', false).html('<i class="ti ti-refresh"></i> Restablecer valores');
             }
         });
     }
     
     /**
-     * Mostrar un aviso en la página
+     * Aplicar un preset de diseño
+     */
+    function applyPreset(presetKey) {
+        // Mostrar indicador de carga
+        const $button = $(`.vortex-preset-item[data-preset="${presetKey}"] .vortex-apply-preset`);
+        const originalText = $button.text();
+        $button.prop('disabled', true).text('Aplicando...');
+        
+        // Enviar datos por AJAX
+        $.ajax({
+            url: vortexThemeCustomizer.ajaxUrl,
+            type: 'POST',
+            data: {
+                action: 'vortex_apply_preset',
+                nonce: vortexThemeCustomizer.nonce,
+                preset: presetKey
+            },
+            success: function(response) {
+                if (response.success) {
+                    showNotice('success', `Tema "${vortexThemeCustomizer.presets[presetKey].name}" aplicado correctamente.`);
+                    
+                    // Actualizar valores en el formulario
+                    updateFormValues(response.data.variables);
+                    
+                    // Actualizar vista previa
+                    updatePreview();
+                } else {
+                    showNotice('error', 'Error al aplicar el tema. Por favor, inténtalo de nuevo.');
+                }
+            },
+            error: function() {
+                showNotice('error', 'Error de conexión. Por favor, inténtalo de nuevo.');
+            },
+            complete: function() {
+                $button.prop('disabled', false).text(originalText);
+            }
+        });
+    }
+    
+    /**
+     * Generar variantes de color
+     */
+    function generateColorVariants(color, variableName) {
+        // Mostrar indicador de carga
+        const $button = $(`.vortex-generate-variants[data-variable="${variableName}"]`);
+        const originalText = $button.html();
+        $button.prop('disabled', true).html('<i class="ti ti-loader"></i> Generando...');
+        
+        // Enviar datos por AJAX
+        $.ajax({
+            url: vortexThemeCustomizer.ajaxUrl,
+            type: 'POST',
+            data: {
+                action: 'vortex_generate_color_variants',
+                nonce: vortexThemeCustomizer.nonce,
+                color: color,
+                variable_name: variableName
+            },
+            success: function(response) {
+                if (response.success) {
+                    showNotice('success', 'Variantes de color generadas correctamente.');
+                    
+                    // Actualizar valores en el formulario
+                    updateFormValues(response.data.variants);
+                    
+                    // Actualizar vista previa
+                    updatePreview();
+                    
+                    // Ir a la pestaña de variantes de color
+                    $tabs.tabs('option', 'active', 1); // Índice de la pestaña "Variantes de Color"
+                } else {
+                    showNotice('error', 'Error al generar variantes de color. Por favor, inténtalo de nuevo.');
+                }
+            },
+            error: function() {
+                showNotice('error', 'Error de conexión. Por favor, inténtalo de nuevo.');
+            },
+            complete: function() {
+                $button.prop('disabled', false).html(originalText);
+            }
+        });
+    }
+    
+    /**
+     * Actualizar valores en el formulario
+     */
+    function updateFormValues(variables) {
+        // Actualizar cada input/select con los nuevos valores
+        for (const [key, value] of Object.entries(variables)) {
+            const $input = $(`#var-${key}`);
+            
+            if ($input.length) {
+                // Actualizar el valor
+                $input.val(value);
+                
+                // Si es un color picker, actualizar el valor y el color
+                if ($input.hasClass('vortex-color-picker')) {
+                    $input.wpColorPicker('color', value);
+                }
+                
+                // Si es un select, disparar el evento change para actualizar la vista previa de la fuente
+                if ($input.is('select')) {
+                    $input.trigger('change');
+                }
+                
+                // Si tiene un slider asociado, actualizar el valor del slider
+                const $slider = $(`.vortex-slider[data-input-id="${$input.attr('id')}"]`);
+                if ($slider.length) {
+                    const numericValue = parseInt(value) || 0;
+                    $slider.slider('value', numericValue);
+                    $slider.siblings('.vortex-slider-value').text(value);
+                }
+            }
+        }
+    }
+    
+    /**
+     * Mostrar notificación
      */
     function showNotice(type, message) {
-        // Eliminar avisos anteriores
-        $('.vortex-notice').remove();
+        $notice.removeClass('notice-info notice-success notice-warning notice-error hidden')
+               .addClass(`notice-${type}`)
+               .find('p')
+               .text(message);
         
-        // Crear nuevo aviso
-        const $notice = $('<div class="notice vortex-notice notice-' + type + ' is-dismissible"><p>' + message + '</p></div>');
-        
-        // Agregar al DOM
-        $('.vortex-ui-panel-wrap > h1').after($notice);
-        
-        // Configurar botón de cierre
-        const $button = $('<button type="button" class="notice-dismiss"><span class="screen-reader-text">Descartar este aviso.</span></button>');
-        $button.on('click', function() {
-            $notice.fadeOut(300, function() {
-                $(this).remove();
-            });
-        });
-        $notice.append($button);
-        
-        // Auto-ocultar después de 5 segundos
+        // Ocultar automáticamente después de un tiempo
         setTimeout(function() {
-            $notice.fadeOut(300, function() {
-                $(this).remove();
-            });
+            $notice.addClass('hidden');
         }, 5000);
     }
+    
+    /**
+     * Generar un tono más oscuro de un color
+     */
+    function generateDarkerShade(hex, percent) {
+        // Remover el # si existe
+        hex = hex.replace('#', '');
+        
+        // Convertir a RGB
+        let r = parseInt(hex.substring(0, 2), 16);
+        let g = parseInt(hex.substring(2, 4), 16);
+        let b = parseInt(hex.substring(4, 6), 16);
+        
+        // Convertir r, g, b a hsl
+        r /= 255, g /= 255, b /= 255;
+        const max = Math.max(r, g, b), min = Math.min(r, g, b);
+        let h, s, l = (max + min) / 2;
+        
+        if (max === min) {
+            h = s = 0; // acromático
+        } else {
+            const d = max - min;
+            s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+            
+            switch (max) {
+                case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                case g: h = (b - r) / d + 2; break;
+                case b: h = (r - g) / d + 4; break;
+            }
+            
+            h /= 6;
+        }
+        
+        // Oscurecer cambiando la luminosidad
+        l = Math.max(0, l - percent / 100);
+        
+        // Convertir de nuevo a RGB
+        if (s === 0) {
+            r = g = b = l; // acromático
+        } else {
+            const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+            const p = 2 * l - q;
+            
+            r = hueToRgb(p, q, h + 1/3);
+            g = hueToRgb(p, q, h);
+            b = hueToRgb(p, q, h - 1/3);
+        }
+        
+        // Convertir a HEX
+        return `#${Math.round(r * 255).toString(16).padStart(2, '0')}${Math.round(g * 255).toString(16).padStart(2, '0')}${Math.round(b * 255).toString(16).padStart(2, '0')}`;
+    }
+    
+    /**
+     * Función auxiliar para convertir hue a rgb
+     */
+    function hueToRgb(p, q, t) {
+        if (t < 0) t += 1;
+        if (t > 1) t -= 1;
+        if (t < 1/6) return p + (q - p) * 6 * t;
+        if (t < 1/2) return q;
+        if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+        return p;
+    }
+    
+    // Inicializar cuando el DOM esté listo
+    $(document).ready(init);
     
 })(jQuery);
