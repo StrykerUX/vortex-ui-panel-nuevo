@@ -38,25 +38,15 @@ class Vortex_Sidebar_Renderer {
 <div class="sidenav-menu">
     <!-- Brand Logo -->
     <a href="<?php echo esc_url($dashboard_url); ?>" class="logo">
-        <span class="logo-light">
+        <div class="logo-container">
             <?php if (!empty($logo_url)) : ?>
-                <span class="logo-lg"><img src="<?php echo esc_url($logo_url); ?>" alt="<?php echo get_bloginfo('name'); ?>"></span>
+                <span class="logo-lg"><img src="<?php echo esc_url($logo_url); ?>" alt="<?php echo get_bloginfo('name'); ?>" class="site-logo"></span>
                 <span class="logo-sm text-center"><?php echo esc_html(substr(get_bloginfo('name'), 0, 2)); ?></span>
             <?php else : ?>
                 <span class="logo-lg"><?php echo get_bloginfo('name'); ?></span>
                 <span class="logo-sm text-center"><?php echo esc_html(substr(get_bloginfo('name'), 0, 2)); ?></span>
             <?php endif; ?>
-        </span>
-
-        <span class="logo-dark">
-            <?php if (!empty($logo_url)) : ?>
-                <span class="logo-lg"><img src="<?php echo esc_url($logo_url); ?>" alt="<?php echo get_bloginfo('name'); ?>"></span>
-                <span class="logo-sm text-center"><?php echo esc_html(substr(get_bloginfo('name'), 0, 2)); ?></span>
-            <?php else : ?>
-                <span class="logo-lg"><?php echo get_bloginfo('name'); ?></span>
-                <span class="logo-sm text-center"><?php echo esc_html(substr(get_bloginfo('name'), 0, 2)); ?></span>
-            <?php endif; ?>
-        </span>
+        </div>
     </a>
 
     <!-- Sidebar Hover Menu Toggle Button -->
@@ -77,6 +67,43 @@ class Vortex_Sidebar_Renderer {
         <div class="clearfix"></div>
     </div>
 </div>
+
+<style>
+/* Estilos del logo */
+.sidenav-menu .logo-container {
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.sidenav-menu .logo-lg {
+    display: block;
+    text-align: center;
+}
+
+.sidenav-menu .site-logo {
+    max-width: 180px;
+    height: auto;
+    max-height: 50px;
+    display: block;
+    margin: 0 auto;
+}
+
+.sidenav-menu .logo-sm {
+    display: none;
+}
+
+/* Responsive para sidebar condensado */
+[data-sidenav-size="condensed"]:not(.sidebar-enable) .sidenav-menu .logo-lg {
+    display: none;
+}
+
+[data-sidenav-size="condensed"]:not(.sidebar-enable) .sidenav-menu .logo-sm {
+    display: block;
+}
+</style>
 <!-- Sidenav Menu End -->
         <?php
         return ob_get_clean();
