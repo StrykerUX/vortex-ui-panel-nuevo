@@ -58,15 +58,42 @@ $default_variables = $this->theme_customizer->get_default_variables();
                             <div class="preview-card-header">Panel de control</div>
                             <div class="preview-card-body">
                                 <p class="preview-text">Vista previa del estilo del tema.</p>
+                                
+                                <!-- Botones originales (ocultos) -->
                                 <button class="preview-button primary">Botón primario</button>
                                 <button class="preview-button secondary">Botón secundario</button>
+                                
+                                <!-- Nuevos botones 3D -->
+                                <div class="btn-wrapper primary">
+                                    <div class="btn-back"></div>
+                                    <a href="#" class="btn">
+                                        <span class="btn-text">Botón primario</span>
+                                        <span class="btn-icon">→</span>
+                                    </a>
+                                </div>
+                                
+                                <div class="btn-wrapper secondary">
+                                    <div class="btn-back"></div>
+                                    <a href="#" class="btn">
+                                        <span class="btn-text">Botón secundario</span>
+                                        <span class="btn-icon">+</span>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="vortex-theme-actions">
-                    <button id="vortex-reset-styles" class="button">Restablecer valores por defecto</button>
-                    <button id="vortex-save-styles" class="button button-primary">Guardar cambios</button>
+                    <!-- Botones 3D para acciones -->
+                    <div class="button-3d-wrapper" id="vortex-reset-styles-wrapper">
+                        <div class="button-3d-back"></div>
+                        <button id="vortex-reset-styles" class="button-3d">Restablecer valores por defecto</button>
+                    </div>
+                    
+                    <div class="button-3d-wrapper primary" id="vortex-save-styles-wrapper">
+                        <div class="button-3d-back"></div>
+                        <button id="vortex-save-styles" class="button-3d">Guardar cambios</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -79,6 +106,7 @@ $default_variables = $this->theme_customizer->get_default_variables();
                             <?php foreach ($variable_categories as $category_key => $category) : ?>
                                 <li><a href="#tab-<?php echo esc_attr($category_key); ?>"><?php echo esc_html($category['title']); ?></a></li>
                             <?php endforeach; ?>
+                            <li><a href="#tab-button-3d">Botones 3D</a></li>
                         </ul>
                         
                         <?php foreach ($variable_categories as $category_key => $category) : ?>
@@ -128,6 +156,122 @@ $default_variables = $this->theme_customizer->get_default_variables();
                                 </div>
                             </div>
                         <?php endforeach; ?>
+                        
+                        <!-- Nueva pestaña para personalización de botones 3D -->
+                        <div id="tab-button-3d">
+                            <h3>Personalización de Botones 3D</h3>
+                            
+                            <div class="vortex-variables-grid">
+                                <!-- Color de fondo del botón principal -->
+                                <div class="vortex-variable-control">
+                                    <label for="var-front-bg-color">Color de fondo del botón</label>
+                                    <input type="text" 
+                                           id="var-front-bg-color" 
+                                           name="variables[front-bg-color]" 
+                                           value="<?php echo esc_attr(isset($custom_variables['front-bg-color']) ? $custom_variables['front-bg-color'] : '#4F46E5'); ?>" 
+                                           class="vortex-color-picker"
+                                           data-default-color="#4F46E5" />
+                                    <p class="description">
+                                        Color de fondo del botón frontal
+                                    </p>
+                                </div>
+                                
+                                <!-- Color del texto -->
+                                <div class="vortex-variable-control">
+                                    <label for="var-front-text-color">Color del texto</label>
+                                    <input type="text" 
+                                           id="var-front-text-color" 
+                                           name="variables[front-text-color]" 
+                                           value="<?php echo esc_attr(isset($custom_variables['front-text-color']) ? $custom_variables['front-text-color'] : '#ffffff'); ?>" 
+                                           class="vortex-color-picker"
+                                           data-default-color="#ffffff" />
+                                    <p class="description">
+                                        Color del texto del botón
+                                    </p>
+                                </div>
+                                
+                                <!-- Color del borde trasero -->
+                                <div class="vortex-variable-control">
+                                    <label for="var-back-border-color">Color del borde trasero</label>
+                                    <input type="text" 
+                                           id="var-back-border-color" 
+                                           name="variables[back-border-color]" 
+                                           value="<?php echo esc_attr(isset($custom_variables['back-border-color']) ? $custom_variables['back-border-color'] : '#3730a3'); ?>" 
+                                           class="vortex-color-picker"
+                                           data-default-color="#3730a3" />
+                                    <p class="description">
+                                        Color del borde de la capa trasera
+                                    </p>
+                                </div>
+                                
+                                <!-- Color de fondo botón secundario -->
+                                <div class="vortex-variable-control">
+                                    <label for="var-secondary-front-bg-color">Color de fondo secundario</label>
+                                    <input type="text" 
+                                           id="var-secondary-front-bg-color" 
+                                           name="variables[secondary-front-bg-color]" 
+                                           value="<?php echo esc_attr(isset($custom_variables['secondary-front-bg-color']) ? $custom_variables['secondary-front-bg-color'] : '#8B5CF6'); ?>" 
+                                           class="vortex-color-picker"
+                                           data-default-color="#8B5CF6" />
+                                    <p class="description">
+                                        Color de fondo para botones secundarios
+                                    </p>
+                                </div>
+                                
+                                <!-- Color del borde trasero secundario -->
+                                <div class="vortex-variable-control">
+                                    <label for="var-secondary-back-border-color">Color del borde trasero secundario</label>
+                                    <input type="text" 
+                                           id="var-secondary-back-border-color" 
+                                           name="variables[secondary-back-border-color]" 
+                                           value="<?php echo esc_attr(isset($custom_variables['secondary-back-border-color']) ? $custom_variables['secondary-back-border-color'] : '#6D28D9'); ?>" 
+                                           class="vortex-color-picker"
+                                           data-default-color="#6D28D9" />
+                                    <p class="description">
+                                        Color del borde trasero para botones secundarios
+                                    </p>
+                                </div>
+                                
+                                <!-- Radio de borde -->
+                                <div class="vortex-variable-control">
+                                    <label for="var-border-radius">Radio de borde</label>
+                                    <input type="text" 
+                                           id="var-border-radius" 
+                                           name="variables[border-radius]" 
+                                           value="<?php echo esc_attr(isset($custom_variables['border-radius']) ? $custom_variables['border-radius'] : '4px'); ?>" 
+                                           class="vortex-text-input" />
+                                    <p class="description">
+                                        Radio de borde de los botones (ejemplo: 4px)
+                                    </p>
+                                </div>
+                                
+                                <!-- Desplazamiento 3D -->
+                                <div class="vortex-variable-control">
+                                    <label for="var-offset">Desplazamiento 3D</label>
+                                    <input type="text" 
+                                           id="var-offset" 
+                                           name="variables[offset]" 
+                                           value="<?php echo esc_attr(isset($custom_variables['offset']) ? $custom_variables['offset'] : '4px'); ?>" 
+                                           class="vortex-text-input" />
+                                    <p class="description">
+                                        Distancia entre el botón y su sombra (ejemplo: 4px)
+                                    </p>
+                                </div>
+                                
+                                <!-- Desplazamiento al pasar el ratón -->
+                                <div class="vortex-variable-control">
+                                    <label for="var-hover-offset">Desplazamiento al hover</label>
+                                    <input type="text" 
+                                           id="var-hover-offset" 
+                                           name="variables[hover-offset]" 
+                                           value="<?php echo esc_attr(isset($custom_variables['hover-offset']) ? $custom_variables['hover-offset'] : '3px'); ?>" 
+                                           class="vortex-text-input" />
+                                    <p class="description">
+                                        Desplazamiento al pasar el ratón (ejemplo: 3px)
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -147,6 +291,7 @@ $default_variables = $this->theme_customizer->get_default_variables();
                         <li><strong>Tipografía:</strong> Configura fuentes, tamaños y estilos de texto</li>
                         <li><strong>Estructura:</strong> Ajusta dimensiones como el ancho de la barra lateral o altura de la barra superior</li>
                         <li><strong>Modo Oscuro:</strong> Personaliza los colores específicos del modo oscuro</li>
+                        <li><strong>Botones 3D:</strong> Personaliza el aspecto de los botones con efecto tridimensional</li>
                     </ul>
                     
                     <h3>Consejos</h3>
@@ -155,6 +300,7 @@ $default_variables = $this->theme_customizer->get_default_variables();
                         <li>Para valores de dimensiones, asegúrate de incluir la unidad (px, rem, em, etc.)</li>
                         <li>Puedes restablecer todo a los valores por defecto con el botón "Restablecer valores por defecto"</li>
                         <li>Recuerda guardar los cambios cuando estés satisfecho con el resultado</li>
+                        <li>Los botones 3D añaden profundidad visual y mejoran la experiencia de usuario</li>
                     </ul>
                 </div>
             </div>
