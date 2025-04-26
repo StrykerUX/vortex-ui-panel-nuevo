@@ -21,7 +21,7 @@ class Vortex_Theme_Customizer {
      * Variables CSS por defecto
      */
     private $default_variables = array(
-        // Colores
+        // Colores principales
         'bs-primary' => '#4F46E5',
         'bs-secondary' => '#8B5CF6',
         'bs-success' => '#10B981',
@@ -31,16 +31,39 @@ class Vortex_Theme_Customizer {
         'bs-light' => '#F9FAFB',
         'bs-dark' => '#111827',
         
+        // Variantes de colores principales (generadas automáticamente)
+        'bs-primary-lightest' => '#E8E7FB',
+        'bs-primary-lighter' => '#C7C5F6',
+        'bs-primary-light' => '#7A74EE',
+        'bs-primary-dark' => '#4338CA',
+        'bs-primary-darker' => '#3730A3',
+        'bs-primary-darkest' => '#312E81',
+        
+        // Colores semánticos para estados
+        'bs-success-light' => '#D1FAE5',
+        'bs-success-dark' => '#065F46',
+        'bs-warning-light' => '#FEF3C7',
+        'bs-warning-dark' => '#92400E',
+        'bs-danger-light' => '#FEE2E2',
+        'bs-danger-dark' => '#B91C1C',
+        'bs-info-light' => '#DBEAFE',
+        'bs-info-dark' => '#1E40AF',
+        
         // Tipografía
         'bs-body-font-family' => "'Inter', sans-serif",
         'bs-body-font-size' => '0.9rem',
         'bs-body-font-weight' => '400',
         'bs-body-line-height' => '1.5',
+        'bs-heading-font-family' => "'Inter', sans-serif",
+        'bs-heading-font-weight' => '600',
         
         // Layout
         'sidenav-width' => '260px',
         'sidenav-condensed-width' => '70px',
         'topbar-height' => '70px',
+        'card-border-radius' => '8px',
+        'button-border-radius' => '4px',
+        'input-border-radius' => '4px',
         
         // Modo oscuro
         'dark-body-color' => '#aab8c5',
@@ -50,16 +73,9 @@ class Vortex_Theme_Customizer {
         'dark-card-border-color' => '#30373d',
         
         // Variables de botones 3D
-        'front-bg-color' => '#4F46E5',
-        'front-text-color' => '#ffffff',
-        'front-border-color' => 'transparent',
-        'back-bg-color' => 'transparent',
-        'back-border-color' => '#3730a3',
-        'border-radius' => '4px',
-        'offset' => '4px',
-        'hover-offset' => '3px',
-        'secondary-front-bg-color' => '#8B5CF6',
-        'secondary-back-border-color' => '#6D28D9',
+        'button-3d-offset' => '4px',
+        'button-3d-hover-offset' => '3px',
+        'button-3d-transition' => '0.1s ease-out',
     );
     
     /**
@@ -67,7 +83,8 @@ class Vortex_Theme_Customizer {
      */
     private $variable_categories = array(
         'colors' => array(
-            'title' => 'Colores',
+            'title' => 'Colores Principales',
+            'icon' => 'ti-palette',
             'variables' => array(
                 'bs-primary' => 'Color primario',
                 'bs-secondary' => 'Color secundario',
@@ -79,25 +96,43 @@ class Vortex_Theme_Customizer {
                 'bs-dark' => 'Color oscuro',
             )
         ),
+        'color_variants' => array(
+            'title' => 'Variantes de Color',
+            'icon' => 'ti-adjustments',
+            'variables' => array(
+                'bs-primary-light' => 'Primario claro',
+                'bs-primary-dark' => 'Primario oscuro',
+                'bs-secondary-light' => 'Secundario claro',
+                'bs-secondary-dark' => 'Secundario oscuro',
+            )
+        ),
         'typography' => array(
             'title' => 'Tipografía',
+            'icon' => 'ti-typography',
             'variables' => array(
                 'bs-body-font-family' => 'Familia de fuente principal',
                 'bs-body-font-size' => 'Tamaño de fuente base',
                 'bs-body-font-weight' => 'Grosor de fuente base',
                 'bs-body-line-height' => 'Altura de línea base',
+                'bs-heading-font-family' => 'Familia de fuente para títulos',
+                'bs-heading-font-weight' => 'Grosor de fuente para títulos',
             )
         ),
         'layout' => array(
             'title' => 'Estructura',
+            'icon' => 'ti-layout',
             'variables' => array(
                 'sidenav-width' => 'Ancho de la barra lateral',
                 'sidenav-condensed-width' => 'Ancho de barra lateral condensada',
                 'topbar-height' => 'Altura de la barra superior',
+                'card-border-radius' => 'Radio de borde para tarjetas',
+                'button-border-radius' => 'Radio de borde para botones',
+                'input-border-radius' => 'Radio de borde para inputs',
             )
         ),
         'dark_mode' => array(
             'title' => 'Modo Oscuro',
+            'icon' => 'ti-moon',
             'variables' => array(
                 'dark-body-color' => 'Color de texto (modo oscuro)',
                 'dark-body-bg' => 'Color de fondo (modo oscuro)',
@@ -106,18 +141,28 @@ class Vortex_Theme_Customizer {
                 'dark-card-border-color' => 'Color de borde de tarjetas (modo oscuro)',
             )
         ),
-        // Nuevas categorías para botones 3D
         'buttons_3d' => array(
             'title' => 'Botones 3D',
+            'icon' => 'ti-click',
             'variables' => array(
-                'front-bg-color' => 'Color de fondo del botón',
-                'front-text-color' => 'Color del texto del botón',
-                'back-border-color' => 'Color del borde trasero',
-                'border-radius' => 'Radio de borde',
-                'offset' => 'Desplazamiento 3D',
-                'hover-offset' => 'Desplazamiento al hover',
-                'secondary-front-bg-color' => 'Color de fondo (secundario)',
-                'secondary-back-border-color' => 'Color de borde trasero (secundario)',
+                'button-3d-offset' => 'Desplazamiento 3D',
+                'button-3d-hover-offset' => 'Desplazamiento al hover',
+                'button-3d-transition' => 'Velocidad de transición',
+            ),
+            'description' => 'Los botones 3D utilizan automáticamente los colores principales del tema para mantener la coherencia visual.'
+        ),
+        'alerts' => array(
+            'title' => 'Alertas y Estados',
+            'icon' => 'ti-alert-circle',
+            'variables' => array(
+                'bs-success-light' => 'Fondo alerta éxito',
+                'bs-success-dark' => 'Borde alerta éxito',
+                'bs-warning-light' => 'Fondo alerta advertencia',
+                'bs-warning-dark' => 'Borde alerta advertencia',
+                'bs-danger-light' => 'Fondo alerta error',
+                'bs-danger-dark' => 'Borde alerta error',
+                'bs-info-light' => 'Fondo alerta información',
+                'bs-info-dark' => 'Borde alerta información',
             )
         ),
     );
@@ -139,6 +184,52 @@ class Vortex_Theme_Customizer {
     );
     
     /**
+     * Presets de diseño disponibles
+     */
+    private $available_presets = array(
+        'modern' => array(
+            'name' => 'Moderno',
+            'description' => 'Diseño limpio y moderno con bordes redondeados y colores vibrantes',
+            'variables' => array(
+                'bs-primary' => '#4F46E5',
+                'bs-secondary' => '#8B5CF6',
+                'button-border-radius' => '8px',
+                'button-3d-offset' => '4px',
+            )
+        ),
+        'minimal' => array(
+            'name' => 'Minimalista',
+            'description' => 'Diseño limpio y sutil con elementos simplificados',
+            'variables' => array(
+                'bs-primary' => '#0EA5E9',
+                'bs-secondary' => '#3B82F6',
+                'button-border-radius' => '4px',
+                'button-3d-offset' => '3px',
+            )
+        ),
+        'bold' => array(
+            'name' => 'Audaz',
+            'description' => 'Elementos destacados con efectos pronunciados y colores vivos',
+            'variables' => array(
+                'bs-primary' => '#6366F1',
+                'bs-secondary' => '#EC4899',
+                'button-border-radius' => '6px',
+                'button-3d-offset' => '6px',
+            )
+        ),
+        'enterprise' => array(
+            'name' => 'Empresarial',
+            'description' => 'Apariencia profesional con colores sobrios y efectos sutiles',
+            'variables' => array(
+                'bs-primary' => '#2563EB',
+                'bs-secondary' => '#475569',
+                'button-border-radius' => '3px',
+                'button-3d-offset' => '3px',
+            )
+        ),
+    );
+    
+    /**
      * Constructor
      */
     private function __construct() {
@@ -147,6 +238,8 @@ class Vortex_Theme_Customizer {
         add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_scripts'));
         add_action('wp_ajax_vortex_save_theme_styles', array($this, 'ajax_save_theme_styles'));
         add_action('wp_ajax_vortex_reset_theme_styles', array($this, 'ajax_reset_theme_styles'));
+        add_action('wp_ajax_vortex_apply_preset', array($this, 'ajax_apply_preset'));
+        add_action('wp_ajax_vortex_generate_color_variants', array($this, 'ajax_generate_color_variants'));
     }
     
     /**
@@ -220,164 +313,236 @@ class Vortex_Theme_Customizer {
                 }
             }
         }
-        $css .= "}\n";
+        $css .= "}\n\n";
         
-        // Aplicar estilos de botones 3D si están definidos
-        if (isset($custom_variables['front-bg-color']) || 
-            isset($custom_variables['front-text-color']) || 
-            isset($custom_variables['back-border-color'])) {
-            
-            $css .= $this->generate_button_styles($custom_variables);
-        }
+        // Integración con botones 3D
+        $css .= $this->generate_button_styles($custom_variables);
+        
+        // Integración con alertas y estados
+        $css .= $this->generate_alert_styles($custom_variables);
         
         return $css;
     }
     
     /**
-     * Generar estilos para botones 3D
+     * Generar estilos para botones 3D integrados con el tema
      */
     private function generate_button_styles($custom_variables) {
-        // Obtener valores de botones 3D con valores predeterminados como respaldo
-        $front_bg_color = isset($custom_variables['front-bg-color']) ? $custom_variables['front-bg-color'] : $this->default_variables['front-bg-color'];
-        $front_text_color = isset($custom_variables['front-text-color']) ? $custom_variables['front-text-color'] : $this->default_variables['front-text-color'];
-        $front_border_color = isset($custom_variables['front-border-color']) ? $custom_variables['front-border-color'] : $this->default_variables['front-border-color'];
-        $back_bg_color = isset($custom_variables['back-bg-color']) ? $custom_variables['back-bg-color'] : $this->default_variables['back-bg-color'];
-        $back_border_color = isset($custom_variables['back-border-color']) ? $custom_variables['back-border-color'] : $this->default_variables['back-border-color'];
-        $border_radius = isset($custom_variables['border-radius']) ? $custom_variables['border-radius'] : $this->default_variables['border-radius'];
-        $offset = isset($custom_variables['offset']) ? $custom_variables['offset'] : $this->default_variables['offset'];
-        $hover_offset = isset($custom_variables['hover-offset']) ? $custom_variables['hover-offset'] : $this->default_variables['hover-offset'];
-        $secondary_front_bg_color = isset($custom_variables['secondary-front-bg-color']) ? $custom_variables['secondary-front-bg-color'] : $this->default_variables['secondary-front-bg-color'];
-        $secondary_back_border_color = isset($custom_variables['secondary-back-border-color']) ? $custom_variables['secondary-back-border-color'] : $this->default_variables['secondary-back-border-color'];
+        // Los colores de los botones ahora se obtienen directamente de los colores del tema
+        $offset = isset($custom_variables['button-3d-offset']) ? $custom_variables['button-3d-offset'] : $this->default_variables['button-3d-offset'];
+        $hover_offset = isset($custom_variables['button-3d-hover-offset']) ? $custom_variables['button-3d-hover-offset'] : $this->default_variables['button-3d-hover-offset'];
+        $transition = isset($custom_variables['button-3d-transition']) ? $custom_variables['button-3d-transition'] : $this->default_variables['button-3d-transition'];
+        $border_radius = isset($custom_variables['button-border-radius']) ? $custom_variables['button-border-radius'] : $this->default_variables['button-border-radius'];
         
         // Crear CSS para botones 3D
-        $css = "/* Estilos de botones 3D personalizados */\n";
+        $css = "/* Estilos de botones 3D integrados con el tema */\n";
         
-        // Clase contenedora para botones 3D
-        $css .= ".btn-wrapper {\n";
+        // Variables globales para botones 3D
+        $css .= ".btn-3d-wrapper, .button-3d-wrapper {\n";
+        $css .= "    --button-3d-offset: {$offset};\n";
+        $css .= "    --button-3d-hover-offset: {$hover_offset};\n";
+        $css .= "    --button-3d-transition: {$transition};\n";
+        $css .= "    --button-border-radius: {$border_radius};\n";
         $css .= "    position: relative;\n";
         $css .= "    display: inline-block;\n";
         $css .= "    margin-right: 10px;\n";
+        $css .= "    margin-bottom: var(--button-3d-offset);\n";
         $css .= "}\n\n";
         
         // Parte trasera del botón
-        $css .= ".btn-back {\n";
+        $css .= ".btn-3d-back, .button-3d-back {\n";
         $css .= "    position: absolute;\n";
-        $css .= "    top: {$offset};\n";
-        $css .= "    left: {$offset};\n";
+        $css .= "    top: var(--button-3d-offset);\n";
+        $css .= "    left: var(--button-3d-offset);\n";
         $css .= "    width: 100%;\n";
         $css .= "    height: 100%;\n";
-        $css .= "    background-color: {$back_bg_color};\n";
-        $css .= "    border: 1px solid {$back_border_color};\n";
-        $css .= "    border-radius: {$border_radius};\n";
+        $css .= "    background-color: transparent;\n";
+        $css .= "    border: 1px solid rgba(0, 0, 0, 0.2);\n";
+        $css .= "    border-radius: var(--button-border-radius);\n";
         $css .= "    z-index: 1;\n";
         $css .= "    box-sizing: border-box;\n";
         $css .= "}\n\n";
         
         // Botón frontal
-        $css .= ".btn {\n";
-        $css .= "    display: flex;\n";
+        $css .= ".btn-3d, .button-3d {\n";
+        $css .= "    display: inline-flex;\n";
         $css .= "    align-items: center;\n";
+        $css .= "    justify-content: center;\n";
         $css .= "    padding: 8px 16px;\n";
-        $css .= "    font-size: 14px;\n";
+        $css .= "    font-size: var(--bs-body-font-size, 14px);\n";
         $css .= "    font-weight: 500;\n";
-        $css .= "    color: {$front_text_color};\n";
-        $css .= "    background-color: {$front_bg_color};\n";
-        $css .= "    border: 1px solid {$front_border_color};\n";
-        $css .= "    border-radius: {$border_radius};\n";
+        $css .= "    color: #fff;\n";
+        $css .= "    background-color: #6c757d;\n";
+        $css .= "    border: 1px solid transparent;\n";
+        $css .= "    border-radius: var(--button-border-radius);\n";
         $css .= "    cursor: pointer;\n";
         $css .= "    position: relative;\n";
         $css .= "    z-index: 2;\n";
         $css .= "    text-decoration: none;\n";
-        $css .= "    transition: transform 0.1s ease-out;\n";
-        $css .= "}\n\n";
-        
-        // Texto e icono
-        $css .= ".btn-text {\n";
-        $css .= "    margin-right: auto;\n";
-        $css .= "}\n\n";
-        
-        $css .= ".btn-icon {\n";
-        $css .= "    color: {$front_text_color};\n";
-        $css .= "    margin-left: 4px;\n";
+        $css .= "    transition: transform var(--button-3d-transition);\n";
         $css .= "}\n\n";
         
         // Efectos hover y active
-        $css .= ".btn-wrapper:hover .btn {\n";
-        $css .= "    transform: translate({$hover_offset}, {$hover_offset});\n";
+        $css .= ".btn-3d-wrapper:hover .btn-3d, .button-3d-wrapper:hover .button-3d {\n";
+        $css .= "    transform: translate(var(--button-3d-hover-offset), var(--button-3d-hover-offset));\n";
         $css .= "}\n\n";
         
-        $css .= ".btn-wrapper:active .btn {\n";
-        $css .= "    transform: translate({$offset}, {$offset});\n";
+        $css .= ".btn-3d-wrapper:active .btn-3d, .button-3d-wrapper:active .button-3d {\n";
+        $css .= "    transform: translate(var(--button-3d-offset), var(--button-3d-offset));\n";
         $css .= "}\n\n";
         
-        // Variantes de botones
-        $css .= ".btn-wrapper.primary .btn {\n";
-        $css .= "    background-color: {$front_bg_color};\n";
-        $css .= "}\n\n";
-        
-        $css .= ".btn-wrapper.primary .btn-back {\n";
-        $css .= "    border-color: {$back_border_color};\n";
-        $css .= "}\n\n";
-        
-        $css .= ".btn-wrapper.secondary .btn {\n";
-        $css .= "    background-color: {$secondary_front_bg_color};\n";
-        $css .= "}\n\n";
-        
-        $css .= ".btn-wrapper.secondary .btn-back {\n";
-        $css .= "    border-color: {$secondary_back_border_color};\n";
-        $css .= "}\n\n";
-        
-        // Botones de acción (guardar, restablecer)
-        $css .= ".button-3d-wrapper {\n";
-        $css .= "    position: relative;\n";
-        $css .= "    display: inline-block;\n";
-        $css .= "    margin: 0 5px;\n";
-        $css .= "}\n\n";
-        
-        $css .= ".button-3d-back {\n";
-        $css .= "    position: absolute;\n";
-        $css .= "    top: {$offset};\n";
-        $css .= "    left: {$offset};\n";
-        $css .= "    width: 100%;\n";
-        $css .= "    height: 100%;\n";
-        $css .= "    background-color: transparent;\n";
-        $css .= "    border: 1px solid #767676;\n";
-        $css .= "    border-radius: {$border_radius};\n";
-        $css .= "    z-index: 1;\n";
-        $css .= "    box-sizing: border-box;\n";
-        $css .= "}\n\n";
-        
-        $css .= ".button-3d {\n";
-        $css .= "    display: inline-block;\n";
-        $css .= "    padding: 8px 16px;\n";
-        $css .= "    font-size: 14px;\n";
-        $css .= "    font-weight: 500;\n";
+        // Variantes de botones referenciando directamente a las variables del tema
+        $css .= ".btn-3d-wrapper.primary .btn-3d, .button-3d-wrapper.primary .button-3d {\n";
+        $css .= "    background-color: var(--bs-primary);\n";
         $css .= "    color: #fff;\n";
-        $css .= "    background-color: #767676;\n";
-        $css .= "    border: 1px solid transparent;\n";
-        $css .= "    border-radius: {$border_radius};\n";
-        $css .= "    cursor: pointer;\n";
-        $css .= "    position: relative;\n";
-        $css .= "    z-index: 2;\n";
-        $css .= "    text-decoration: none;\n";
-        $css .= "    transition: transform 0.1s ease-out;\n";
         $css .= "}\n\n";
         
-        $css .= ".button-3d-wrapper:hover .button-3d {\n";
-        $css .= "    transform: translate({$hover_offset}, {$hover_offset});\n";
+        $css .= ".btn-3d-wrapper.primary .btn-3d-back, .button-3d-wrapper.primary .button-3d-back {\n";
+        $css .= "    border-color: var(--bs-primary-dark, rgba(0, 0, 0, 0.2));\n";
         $css .= "}\n\n";
         
-        $css .= ".button-3d-wrapper:active .button-3d {\n";
-        $css .= "    transform: translate({$offset}, {$offset});\n";
+        $css .= ".btn-3d-wrapper.secondary .btn-3d, .button-3d-wrapper.secondary .button-3d {\n";
+        $css .= "    background-color: var(--bs-secondary);\n";
+        $css .= "    color: #fff;\n";
         $css .= "}\n\n";
         
-        $css .= ".button-3d-wrapper.primary .button-3d {\n";
-        $css .= "    background-color: {$front_bg_color};\n";
+        $css .= ".btn-3d-wrapper.secondary .btn-3d-back, .button-3d-wrapper.secondary .button-3d-back {\n";
+        $css .= "    border-color: var(--bs-secondary-dark, rgba(0, 0, 0, 0.2));\n";
         $css .= "}\n\n";
         
-        $css .= ".button-3d-wrapper.primary .button-3d-back {\n";
-        $css .= "    border-color: {$back_border_color};\n";
+        $css .= ".btn-3d-wrapper.success .btn-3d, .button-3d-wrapper.success .button-3d {\n";
+        $css .= "    background-color: var(--bs-success);\n";
+        $css .= "    color: #fff;\n";
+        $css .= "}\n\n";
+        
+        $css .= ".btn-3d-wrapper.success .btn-3d-back, .button-3d-wrapper.success .button-3d-back {\n";
+        $css .= "    border-color: var(--bs-success-dark, rgba(0, 0, 0, 0.2));\n";
+        $css .= "}\n\n";
+        
+        $css .= ".btn-3d-wrapper.danger .btn-3d, .button-3d-wrapper.danger .button-3d {\n";
+        $css .= "    background-color: var(--bs-danger);\n";
+        $css .= "    color: #fff;\n";
+        $css .= "}\n\n";
+        
+        $css .= ".btn-3d-wrapper.danger .btn-3d-back, .button-3d-wrapper.danger .button-3d-back {\n";
+        $css .= "    border-color: var(--bs-danger-dark, rgba(0, 0, 0, 0.2));\n";
+        $css .= "}\n\n";
+        
+        $css .= ".btn-3d-wrapper.warning .btn-3d, .button-3d-wrapper.warning .button-3d {\n";
+        $css .= "    background-color: var(--bs-warning);\n";
+        $css .= "    color: #fff;\n";
+        $css .= "}\n\n";
+        
+        $css .= ".btn-3d-wrapper.warning .btn-3d-back, .button-3d-wrapper.warning .button-3d-back {\n";
+        $css .= "    border-color: var(--bs-warning-dark, rgba(0, 0, 0, 0.2));\n";
+        $css .= "}\n\n";
+        
+        $css .= ".btn-3d-wrapper.info .btn-3d, .button-3d-wrapper.info .button-3d {\n";
+        $css .= "    background-color: var(--bs-info);\n";
+        $css .= "    color: #fff;\n";
+        $css .= "}\n\n";
+        
+        $css .= ".btn-3d-wrapper.info .btn-3d-back, .button-3d-wrapper.info .button-3d-back {\n";
+        $css .= "    border-color: var(--bs-info-dark, rgba(0, 0, 0, 0.2));\n";
         $css .= "}\n";
+        
+        // Botones con iconos
+        $css .= ".btn-3d-icon, .button-3d-icon {\n";
+        $css .= "    margin-left: 8px;\n";
+        $css .= "}\n\n";
+        
+        // Tamaños de botones
+        $css .= ".btn-3d-wrapper.sm .btn-3d, .button-3d-wrapper.sm .button-3d {\n";
+        $css .= "    padding: 5px 10px;\n";
+        $css .= "    font-size: 12px;\n";
+        $css .= "}\n\n";
+        
+        $css .= ".btn-3d-wrapper.lg .btn-3d, .button-3d-wrapper.lg .button-3d {\n";
+        $css .= "    padding: 12px 20px;\n";
+        $css .= "    font-size: 16px;\n";
+        $css .= "}\n\n";
+        
+        return $css;
+    }
+    
+    /**
+     * Generar estilos para alertas y estados
+     */
+    private function generate_alert_styles($custom_variables) {
+        $css = "/* Estilos de alertas y estados */\n";
+        
+        // Sistema de alertas
+        $css .= ".alert {\n";
+        $css .= "    padding: 1rem;\n";
+        $css .= "    margin-bottom: 1rem;\n";
+        $css .= "    border-radius: var(--button-border-radius, 4px);\n";
+        $css .= "    display: flex;\n";
+        $css .= "    align-items: flex-start;\n";
+        $css .= "    border-left-width: 4px;\n";
+        $css .= "    border-left-style: solid;\n";
+        $css .= "}\n\n";
+        
+        $css .= ".alert-icon {\n";
+        $css .= "    margin-right: 0.75rem;\n";
+        $css .= "    font-size: 1.25rem;\n";
+        $css .= "    display: flex;\n";
+        $css .= "    align-items: center;\n";
+        $css .= "    justify-content: center;\n";
+        $css .= "}\n\n";
+        
+        $css .= ".alert-content {\n";
+        $css .= "    flex: 1;\n";
+        $css .= "}\n\n";
+        
+        $css .= ".alert-title {\n";
+        $css .= "    font-weight: 600;\n";
+        $css .= "    margin-bottom: 0.25rem;\n";
+        $css .= "}\n\n";
+        
+        $css .= ".alert-message {\n";
+        $css .= "    margin-bottom: 0;\n";
+        $css .= "}\n\n";
+        
+        // Variantes de alertas usando variables del tema
+        $css .= ".alert-success {\n";
+        $css .= "    background-color: var(--bs-success-light, #D1FAE5);\n";
+        $css .= "    border-left-color: var(--bs-success, #10B981);\n";
+        $css .= "    color: var(--bs-success-dark, #065F46);\n";
+        $css .= "}\n\n";
+        
+        $css .= ".alert-success .alert-icon {\n";
+        $css .= "    color: var(--bs-success, #10B981);\n";
+        $css .= "}\n\n";
+        
+        $css .= ".alert-warning {\n";
+        $css .= "    background-color: var(--bs-warning-light, #FEF3C7);\n";
+        $css .= "    border-left-color: var(--bs-warning, #F59E0B);\n";
+        $css .= "    color: var(--bs-warning-dark, #92400E);\n";
+        $css .= "}\n\n";
+        
+        $css .= ".alert-warning .alert-icon {\n";
+        $css .= "    color: var(--bs-warning, #F59E0B);\n";
+        $css .= "}\n\n";
+        
+        $css .= ".alert-danger {\n";
+        $css .= "    background-color: var(--bs-danger-light, #FEE2E2);\n";
+        $css .= "    border-left-color: var(--bs-danger, #EF4444);\n";
+        $css .= "    color: var(--bs-danger-dark, #B91C1C);\n";
+        $css .= "}\n\n";
+        
+        $css .= ".alert-danger .alert-icon {\n";
+        $css .= "    color: var(--bs-danger, #EF4444);\n";
+        $css .= "}\n\n";
+        
+        $css .= ".alert-info {\n";
+        $css .= "    background-color: var(--bs-info-light, #DBEAFE);\n";
+        $css .= "    border-left-color: var(--bs-info, #3B82F6);\n";
+        $css .= "    color: var(--bs-info-dark, #1E40AF);\n";
+        $css .= "}\n\n";
+        
+        $css .= ".alert-info .alert-icon {\n";
+        $css .= "    color: var(--bs-info, #3B82F6);\n";
+        $css .= "}\n\n";
         
         return $css;
     }
@@ -411,35 +576,104 @@ class Vortex_Theme_Customizer {
     }
     
     /**
+     * Generar una variante de color (más claro o más oscuro)
+     */
+    private function adjust_color_brightness($hex, $percent) {
+        // Remover el # si existe
+        $hex = ltrim($hex, '#');
+        
+        // Convertir a RGB
+        $r = hexdec(substr($hex, 0, 2));
+        $g = hexdec(substr($hex, 2, 2));
+        $b = hexdec(substr($hex, 4, 2));
+        
+        // Ajustar brillo
+        if ($percent > 0) {
+            // Más claro
+            $r = round($r + (255 - $r) * $percent / 100);
+            $g = round($g + (255 - $g) * $percent / 100);
+            $b = round($b + (255 - $b) * $percent / 100);
+        } else {
+            // Más oscuro
+            $percent = abs($percent);
+            $r = round($r * (100 - $percent) / 100);
+            $g = round($g * (100 - $percent) / 100);
+            $b = round($b * (100 - $percent) / 100);
+        }
+        
+        // Convertir de nuevo a hexadecimal
+        return '#' . sprintf("%02x%02x%02x", $r, $g, $b);
+    }
+    
+    /**
+     * Generar variantes de un color (claro, oscuro, etc.)
+     */
+    public function generate_color_variants($color) {
+        return array(
+            'lightest' => $this->adjust_color_brightness($color, 90),
+            'lighter' => $this->adjust_color_brightness($color, 70),
+            'light' => $this->adjust_color_brightness($color, 30),
+            'base' => $color,
+            'dark' => $this->adjust_color_brightness($color, -20),
+            'darker' => $this->adjust_color_brightness($color, -40),
+            'darkest' => $this->adjust_color_brightness($color, -60),
+        );
+    }
+    
+    /**
      * Encolar fuentes de Google
      */
     private function enqueue_google_fonts() {
         $custom_variables = get_option('vortex_theme_custom_variables', array());
         
         // Verificar si hay una fuente personalizada
-        if (isset($custom_variables['bs-body-font-family'])) {
-            $font_family = trim($custom_variables['bs-body-font-family'], "'");
-            $font_family = explode(',', $font_family)[0];
-            
-            // Lista de fuentes que necesitamos cargar
+        if (isset($custom_variables['bs-body-font-family']) || isset($custom_variables['bs-heading-font-family'])) {
             $fonts_to_load = array();
             
-            // Solo encolar si no es una fuente del sistema
-            $system_fonts = array('Arial', 'Helvetica', 'Times New Roman', 'serif', 'sans-serif');
-            if (!in_array($font_family, $system_fonts)) {
-                // Reemplazar espacios con +
-                $font_family_url = str_replace(' ', '+', $font_family);
-                
-                // Añadir a la lista de fuentes a cargar
-                $fonts_to_load[] = $font_family_url . ':300,400,500,600,700';
+            // Procesar fuente del cuerpo
+            if (isset($custom_variables['bs-body-font-family'])) {
+                $body_font = $this->extract_font_name($custom_variables['bs-body-font-family']);
+                if ($body_font && !$this->is_system_font($body_font)) {
+                    $fonts_to_load[$body_font] = true;
+                }
             }
             
-            // Encolar fuentes de Google
+            // Procesar fuente de títulos
+            if (isset($custom_variables['bs-heading-font-family'])) {
+                $heading_font = $this->extract_font_name($custom_variables['bs-heading-font-family']);
+                if ($heading_font && !$this->is_system_font($heading_font)) {
+                    $fonts_to_load[$heading_font] = true;
+                }
+            }
+            
+            // Cargar fuentes si es necesario
             if (!empty($fonts_to_load)) {
-                $google_fonts_url = 'https://fonts.googleapis.com/css2?family=' . implode('&family=', $fonts_to_load) . '&display=swap';
+                $google_fonts = array();
+                foreach (array_keys($fonts_to_load) as $font) {
+                    $google_fonts[] = $font . ':300,400,500,600,700';
+                }
+                
+                $google_fonts_url = 'https://fonts.googleapis.com/css2?family=' . implode('&family=', $google_fonts) . '&display=swap';
                 wp_enqueue_style('vortex-google-fonts', $google_fonts_url, array(), null);
             }
         }
+    }
+    
+    /**
+     * Extraer el nombre de la fuente de un valor font-family
+     */
+    private function extract_font_name($font_family) {
+        $font_family = trim($font_family, "'");
+        $parts = explode(',', $font_family);
+        return trim($parts[0]);
+    }
+    
+    /**
+     * Verificar si es una fuente del sistema
+     */
+    private function is_system_font($font_name) {
+        $system_fonts = array('Arial', 'Helvetica', 'Times New Roman', 'serif', 'sans-serif', 'monospace', 'cursive', 'fantasy');
+        return in_array($font_name, $system_fonts);
     }
     
     /**
@@ -455,14 +689,17 @@ class Vortex_Theme_Customizer {
         wp_enqueue_style('wp-color-picker');
         wp_enqueue_script('wp-color-picker');
         wp_enqueue_script('jquery-ui-tabs');
+        wp_enqueue_script('jquery-ui-accordion');
+        wp_enqueue_script('jquery-ui-slider');
         
         // Encolar script personalizado
-        wp_enqueue_script('vortex-theme-customizer', VORTEX_UI_PANEL_URL . 'assets/js/theme-customizer.js', array('jquery', 'wp-color-picker', 'jquery-ui-tabs'), VORTEX_UI_PANEL_VERSION, true);
+        wp_enqueue_script('vortex-theme-customizer', VORTEX_UI_PANEL_URL . 'assets/js/theme-customizer.js', array('jquery', 'wp-color-picker', 'jquery-ui-tabs', 'jquery-ui-accordion', 'jquery-ui-slider'), VORTEX_UI_PANEL_VERSION, true);
         
         // Pasar variables al script
         wp_localize_script('vortex-theme-customizer', 'vortexThemeCustomizer', array(
             'ajaxUrl' => admin_url('admin-ajax.php'),
             'nonce' => wp_create_nonce('vortex_theme_customizer_nonce'),
+            'presets' => $this->available_presets,
         ));
     }
     
@@ -501,8 +738,14 @@ class Vortex_Theme_Customizer {
         // Guardar en la base de datos
         update_option('vortex_theme_custom_variables', $sanitized_variables);
         
+        // Generar CSS actualizado
+        $updated_css = $this->generate_custom_css();
+        
         // Responder con éxito
-        wp_send_json_success('Estilos guardados correctamente');
+        wp_send_json_success(array(
+            'message' => 'Estilos guardados correctamente',
+            'css' => $updated_css
+        ));
     }
     
     /**
@@ -523,7 +766,100 @@ class Vortex_Theme_Customizer {
         delete_option('vortex_theme_custom_variables');
         
         // Responder con éxito
-        wp_send_json_success('Estilos restablecidos a valores por defecto');
+        wp_send_json_success(array(
+            'message' => 'Estilos restablecidos a valores por defecto',
+            'variables' => $this->default_variables
+        ));
+    }
+    
+    /**
+     * Aplicar un preset de diseño vía AJAX
+     */
+    public function ajax_apply_preset() {
+        // Verificar nonce
+        if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'vortex_theme_customizer_nonce')) {
+            wp_send_json_error('Invalid security token');
+        }
+        
+        // Verificar permisos
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error('Insufficient permissions');
+        }
+        
+        // Obtener el preset solicitado
+        $preset_key = isset($_POST['preset']) ? sanitize_text_field($_POST['preset']) : '';
+        
+        if (!isset($this->available_presets[$preset_key])) {
+            wp_send_json_error('Preset not found');
+        }
+        
+        // Obtener variables actuales
+        $current_variables = get_option('vortex_theme_custom_variables', array());
+        
+        // Combinar con variables del preset
+        $preset_variables = $this->available_presets[$preset_key]['variables'];
+        $updated_variables = array_merge($current_variables, $preset_variables);
+        
+        // Guardar variables actualizadas
+        update_option('vortex_theme_custom_variables', $updated_variables);
+        
+        // Responder con éxito
+        wp_send_json_success(array(
+            'message' => 'Preset aplicado correctamente',
+            'variables' => $updated_variables
+        ));
+    }
+    
+    /**
+     * Generar variantes de color vía AJAX
+     */
+    public function ajax_generate_color_variants() {
+        // Verificar nonce
+        if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'vortex_theme_customizer_nonce')) {
+            wp_send_json_error('Invalid security token');
+        }
+        
+        // Verificar permisos
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error('Insufficient permissions');
+        }
+        
+        // Obtener el color base y el nombre de la variable
+        $color = isset($_POST['color']) ? sanitize_hex_color($_POST['color']) : '';
+        $variable_name = isset($_POST['variable_name']) ? sanitize_text_field($_POST['variable_name']) : '';
+        
+        if (empty($color) || empty($variable_name)) {
+            wp_send_json_error('Missing color or variable name');
+        }
+        
+        // Generar variantes
+        $variants = $this->generate_color_variants($color);
+        
+        // Preparar variables para guardar
+        $base_name = str_replace('bs-', '', $variable_name);
+        $color_variables = array();
+        
+        foreach ($variants as $variant => $variant_color) {
+            if ($variant !== 'base') {
+                $variant_name = "bs-{$base_name}-{$variant}";
+                $color_variables[$variant_name] = $variant_color;
+            }
+        }
+        
+        // Obtener variables actuales
+        $current_variables = get_option('vortex_theme_custom_variables', array());
+        
+        // Combinar con las nuevas variantes
+        $updated_variables = array_merge($current_variables, $color_variables);
+        
+        // Guardar variables actualizadas
+        update_option('vortex_theme_custom_variables', $updated_variables);
+        
+        // Responder con éxito
+        wp_send_json_success(array(
+            'message' => 'Variantes de color generadas correctamente',
+            'variants' => $color_variables
+        ));
     }
     
     /**
@@ -548,6 +884,13 @@ class Vortex_Theme_Customizer {
      */
     public function get_available_fonts() {
         return $this->available_fonts;
+    }
+    
+    /**
+     * Obtener presets disponibles
+     */
+    public function get_available_presets() {
+        return $this->available_presets;
     }
     
     /**
