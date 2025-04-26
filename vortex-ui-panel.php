@@ -3,7 +3,7 @@
  * Plugin Name: Vortex UI Panel
  * Plugin URI: https://github.com/StrykerUX/vortex-ui-panel-nuevo
  * Description: Plugin de WordPress para crear paneles de administración personalizados con un menú lateral estilo SaaS moderno.
- * Version: 0.1.1
+ * Version: 0.1.2
  * Author: StrykerUX
  * Text Domain: vortex-ui-panel
  * Domain Path: /languages
@@ -17,7 +17,7 @@ if (!defined('WPINC')) {
 /**
  * Versión actual del plugin.
  */
-define('VORTEX_UI_PANEL_VERSION', '0.1.1');
+define('VORTEX_UI_PANEL_VERSION', '0.1.2');
 
 /**
  * Path al directorio del plugin
@@ -36,6 +36,7 @@ require_once VORTEX_UI_PANEL_PATH . 'includes/class-vortex-menu-manager.php';
 require_once VORTEX_UI_PANEL_PATH . 'includes/class-vortex-admin-page.php';
 require_once VORTEX_UI_PANEL_PATH . 'includes/class-vortex-sidebar-renderer.php';
 require_once VORTEX_UI_PANEL_PATH . 'includes/class-vortex-tabler-icons.php';
+require_once VORTEX_UI_PANEL_PATH . 'includes/class-vortex-theme-customizer.php';
 
 /**
  * Clase principal del plugin
@@ -63,12 +64,17 @@ class Vortex_UI_Panel {
     private $sidebar_renderer;
     
     /**
+     * Personalizador de estilos del tema
+     */
+    private $theme_customizer;
+    
+    /**
      * Inicializa el plugin
      */
     private function __construct() {
         // Inicializar componentes
         $this->menu_manager = new Vortex_Menu_Manager();
-        $this->admin_page = new Vortex_Admin_Page($this->menu_manager);
+        $this->admin_page = new Vortex_Admin_Page($this->menu_manager, $this->get_theme_customizer());
         $this->sidebar_renderer = new Vortex_Sidebar_Renderer($this->menu_manager);
         
         // Registrar hooks
@@ -95,29 +101,47 @@ class Vortex_UI_Panel {
     }
     
     /**
+     * Inicializa el personalizador de estilos del tema
+     */
+    public function get_theme_customizer() {
+        if (null === $this->theme_customizer) {
+            $this->theme_customizer = Vortex_Theme_Customizer::get_instance();
+        }
+        return $this->theme_customizer;
+    }
+    
+    /**
      * Registra los estilos del panel de administración
      */
     public function enqueue_admin_styles($hook) {
-        // Solo cargar en la página del plugin
-        if (strpos($hook, 'vortex-ui-panel') === false) {
-            return;
+        // Para todas las páginas del plugin
+        if (strpos($hook, 'vortex-ui-panel') !== false) {
+            // Estilos generales
+            wp_enqueue_style('vortex-admin-styles', VORTEX_UI_PANEL_URL . 'assets/css/admin.css', array(), VORTEX_UI_PANEL_VERSION);
+            
+            // Cargar iconos de Tabler
+            Vortex_Tabler_Icons::enqueue_icons();
         }
         
-        // Registrar y encolar estilos
-        wp_enqueue_style('vortex-admin-styles', VORTEX_UI_PANEL_URL . 'assets/css/admin.css', array(), VORTEX_UI_PANEL_VERSION);
-        wp_enqueue_script('vortex-admin-script', VORTEX_UI_PANEL_URL . 'assets/js/admin.js', array('jquery', 'jquery-ui-sortable'), VORTEX_UI_PANEL_VERSION, true);
+        // Para la página del gestor de menú
+        if (strpos($hook, 'vortex-ui-panel') === 0 && strpos($hook, 'vortex-ui-panel-theme-styles') === false && strpos($hook, 'vortex-ui-panel-settings') === false) {
+            wp_enqueue_script('vortex-admin-script', VORTEX_UI_PANEL_URL . 'assets/js/admin.js', array('jquery', 'jquery-ui-sortable'), VORTEX_UI_PANEL_VERSION, true);
+            
+            // Cargar media uploader de WordPress
+            wp_enqueue_media();
+            
+            // Pasar variables al script
+            wp_localize_script('vortex-admin-script', 'vortexUIPanel', array(
+                'ajaxUrl' => admin_url('admin-ajax.php'),
+                'nonce' => wp_create_nonce('vortex_ui_panel_nonce')
+            ));
+        }
         
-        // Cargar iconos de Tabler
-        Vortex_Tabler_Icons::enqueue_icons();
-        
-        // Cargar media uploader de WordPress
-        wp_enqueue_media();
-        
-        // Pasar variables al script
-        wp_localize_script('vortex-admin-script', 'vortexUIPanel', array(
-            'ajaxUrl' => admin_url('admin-ajax.php'),
-            'nonce' => wp_create_nonce('vortex_ui_panel_nonce')
-        ));
+        // Para la página del personalizador de estilos
+        if (strpos($hook, 'vortex-ui-panel-theme-styles') !== false) {
+            // Estilos específicos para el personalizador
+            wp_enqueue_style('vortex-theme-customizer-styles', VORTEX_UI_PANEL_URL . 'assets/css/theme-customizer.css', array(), VORTEX_UI_PANEL_VERSION);
+        }
     }
     
     /**
