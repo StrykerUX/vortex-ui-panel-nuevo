@@ -48,6 +48,18 @@ class Vortex_Theme_Customizer {
         'dark-tertiary-bg' => '#2b3035',
         'dark-card-bg' => '#262e35',
         'dark-card-border-color' => '#30373d',
+        
+        // Variables de botones 3D
+        'front-bg-color' => '#4F46E5',
+        'front-text-color' => '#ffffff',
+        'front-border-color' => 'transparent',
+        'back-bg-color' => 'transparent',
+        'back-border-color' => '#3730a3',
+        'border-radius' => '4px',
+        'offset' => '4px',
+        'hover-offset' => '3px',
+        'secondary-front-bg-color' => '#8B5CF6',
+        'secondary-back-border-color' => '#6D28D9',
     );
     
     /**
@@ -92,6 +104,20 @@ class Vortex_Theme_Customizer {
                 'dark-tertiary-bg' => 'Color de fondo terciario (modo oscuro)',
                 'dark-card-bg' => 'Color de fondo de tarjetas (modo oscuro)',
                 'dark-card-border-color' => 'Color de borde de tarjetas (modo oscuro)',
+            )
+        ),
+        // Nuevas categorías para botones 3D
+        'buttons_3d' => array(
+            'title' => 'Botones 3D',
+            'variables' => array(
+                'front-bg-color' => 'Color de fondo del botón',
+                'front-text-color' => 'Color del texto del botón',
+                'back-border-color' => 'Color del borde trasero',
+                'border-radius' => 'Radio de borde',
+                'offset' => 'Desplazamiento 3D',
+                'hover-offset' => 'Desplazamiento al hover',
+                'secondary-front-bg-color' => 'Color de fondo (secundario)',
+                'secondary-back-border-color' => 'Color de borde trasero (secundario)',
             )
         ),
     );
@@ -194,6 +220,163 @@ class Vortex_Theme_Customizer {
                 }
             }
         }
+        $css .= "}\n";
+        
+        // Aplicar estilos de botones 3D si están definidos
+        if (isset($custom_variables['front-bg-color']) || 
+            isset($custom_variables['front-text-color']) || 
+            isset($custom_variables['back-border-color'])) {
+            
+            $css .= $this->generate_button_styles($custom_variables);
+        }
+        
+        return $css;
+    }
+    
+    /**
+     * Generar estilos para botones 3D
+     */
+    private function generate_button_styles($custom_variables) {
+        // Obtener valores de botones 3D con valores predeterminados como respaldo
+        $front_bg_color = isset($custom_variables['front-bg-color']) ? $custom_variables['front-bg-color'] : $this->default_variables['front-bg-color'];
+        $front_text_color = isset($custom_variables['front-text-color']) ? $custom_variables['front-text-color'] : $this->default_variables['front-text-color'];
+        $front_border_color = isset($custom_variables['front-border-color']) ? $custom_variables['front-border-color'] : $this->default_variables['front-border-color'];
+        $back_bg_color = isset($custom_variables['back-bg-color']) ? $custom_variables['back-bg-color'] : $this->default_variables['back-bg-color'];
+        $back_border_color = isset($custom_variables['back-border-color']) ? $custom_variables['back-border-color'] : $this->default_variables['back-border-color'];
+        $border_radius = isset($custom_variables['border-radius']) ? $custom_variables['border-radius'] : $this->default_variables['border-radius'];
+        $offset = isset($custom_variables['offset']) ? $custom_variables['offset'] : $this->default_variables['offset'];
+        $hover_offset = isset($custom_variables['hover-offset']) ? $custom_variables['hover-offset'] : $this->default_variables['hover-offset'];
+        $secondary_front_bg_color = isset($custom_variables['secondary-front-bg-color']) ? $custom_variables['secondary-front-bg-color'] : $this->default_variables['secondary-front-bg-color'];
+        $secondary_back_border_color = isset($custom_variables['secondary-back-border-color']) ? $custom_variables['secondary-back-border-color'] : $this->default_variables['secondary-back-border-color'];
+        
+        // Crear CSS para botones 3D
+        $css = "/* Estilos de botones 3D personalizados */\n";
+        
+        // Clase contenedora para botones 3D
+        $css .= ".btn-wrapper {\n";
+        $css .= "    position: relative;\n";
+        $css .= "    display: inline-block;\n";
+        $css .= "    margin-right: 10px;\n";
+        $css .= "}\n\n";
+        
+        // Parte trasera del botón
+        $css .= ".btn-back {\n";
+        $css .= "    position: absolute;\n";
+        $css .= "    top: {$offset};\n";
+        $css .= "    left: {$offset};\n";
+        $css .= "    width: 100%;\n";
+        $css .= "    height: 100%;\n";
+        $css .= "    background-color: {$back_bg_color};\n";
+        $css .= "    border: 1px solid {$back_border_color};\n";
+        $css .= "    border-radius: {$border_radius};\n";
+        $css .= "    z-index: 1;\n";
+        $css .= "    box-sizing: border-box;\n";
+        $css .= "}\n\n";
+        
+        // Botón frontal
+        $css .= ".btn {\n";
+        $css .= "    display: flex;\n";
+        $css .= "    align-items: center;\n";
+        $css .= "    padding: 8px 16px;\n";
+        $css .= "    font-size: 14px;\n";
+        $css .= "    font-weight: 500;\n";
+        $css .= "    color: {$front_text_color};\n";
+        $css .= "    background-color: {$front_bg_color};\n";
+        $css .= "    border: 1px solid {$front_border_color};\n";
+        $css .= "    border-radius: {$border_radius};\n";
+        $css .= "    cursor: pointer;\n";
+        $css .= "    position: relative;\n";
+        $css .= "    z-index: 2;\n";
+        $css .= "    text-decoration: none;\n";
+        $css .= "    transition: transform 0.1s ease-out;\n";
+        $css .= "}\n\n";
+        
+        // Texto e icono
+        $css .= ".btn-text {\n";
+        $css .= "    margin-right: auto;\n";
+        $css .= "}\n\n";
+        
+        $css .= ".btn-icon {\n";
+        $css .= "    color: {$front_text_color};\n";
+        $css .= "    margin-left: 4px;\n";
+        $css .= "}\n\n";
+        
+        // Efectos hover y active
+        $css .= ".btn-wrapper:hover .btn {\n";
+        $css .= "    transform: translate({$hover_offset}, {$hover_offset});\n";
+        $css .= "}\n\n";
+        
+        $css .= ".btn-wrapper:active .btn {\n";
+        $css .= "    transform: translate({$offset}, {$offset});\n";
+        $css .= "}\n\n";
+        
+        // Variantes de botones
+        $css .= ".btn-wrapper.primary .btn {\n";
+        $css .= "    background-color: {$front_bg_color};\n";
+        $css .= "}\n\n";
+        
+        $css .= ".btn-wrapper.primary .btn-back {\n";
+        $css .= "    border-color: {$back_border_color};\n";
+        $css .= "}\n\n";
+        
+        $css .= ".btn-wrapper.secondary .btn {\n";
+        $css .= "    background-color: {$secondary_front_bg_color};\n";
+        $css .= "}\n\n";
+        
+        $css .= ".btn-wrapper.secondary .btn-back {\n";
+        $css .= "    border-color: {$secondary_back_border_color};\n";
+        $css .= "}\n\n";
+        
+        // Botones de acción (guardar, restablecer)
+        $css .= ".button-3d-wrapper {\n";
+        $css .= "    position: relative;\n";
+        $css .= "    display: inline-block;\n";
+        $css .= "    margin: 0 5px;\n";
+        $css .= "}\n\n";
+        
+        $css .= ".button-3d-back {\n";
+        $css .= "    position: absolute;\n";
+        $css .= "    top: {$offset};\n";
+        $css .= "    left: {$offset};\n";
+        $css .= "    width: 100%;\n";
+        $css .= "    height: 100%;\n";
+        $css .= "    background-color: transparent;\n";
+        $css .= "    border: 1px solid #767676;\n";
+        $css .= "    border-radius: {$border_radius};\n";
+        $css .= "    z-index: 1;\n";
+        $css .= "    box-sizing: border-box;\n";
+        $css .= "}\n\n";
+        
+        $css .= ".button-3d {\n";
+        $css .= "    display: inline-block;\n";
+        $css .= "    padding: 8px 16px;\n";
+        $css .= "    font-size: 14px;\n";
+        $css .= "    font-weight: 500;\n";
+        $css .= "    color: #fff;\n";
+        $css .= "    background-color: #767676;\n";
+        $css .= "    border: 1px solid transparent;\n";
+        $css .= "    border-radius: {$border_radius};\n";
+        $css .= "    cursor: pointer;\n";
+        $css .= "    position: relative;\n";
+        $css .= "    z-index: 2;\n";
+        $css .= "    text-decoration: none;\n";
+        $css .= "    transition: transform 0.1s ease-out;\n";
+        $css .= "}\n\n";
+        
+        $css .= ".button-3d-wrapper:hover .button-3d {\n";
+        $css .= "    transform: translate({$hover_offset}, {$hover_offset});\n";
+        $css .= "}\n\n";
+        
+        $css .= ".button-3d-wrapper:active .button-3d {\n";
+        $css .= "    transform: translate({$offset}, {$offset});\n";
+        $css .= "}\n\n";
+        
+        $css .= ".button-3d-wrapper.primary .button-3d {\n";
+        $css .= "    background-color: {$front_bg_color};\n";
+        $css .= "}\n\n";
+        
+        $css .= ".button-3d-wrapper.primary .button-3d-back {\n";
+        $css .= "    border-color: {$back_border_color};\n";
         $css .= "}\n";
         
         return $css;
