@@ -17,6 +17,11 @@ class Vortex_Admin_Page {
     private $menu_manager;
     
     /**
+     * Instancia del personalizador de estilos del tema
+     */
+    private $theme_customizer;
+    
+    /**
      * Slug de la página de administración
      */
     const MENU_SLUG = 'vortex-ui-panel';
@@ -24,8 +29,9 @@ class Vortex_Admin_Page {
     /**
      * Constructor
      */
-    public function __construct($menu_manager) {
+    public function __construct($menu_manager, $theme_customizer = null) {
         $this->menu_manager = $menu_manager;
+        $this->theme_customizer = $theme_customizer;
     }
     
     /**
@@ -49,6 +55,15 @@ class Vortex_Admin_Page {
             'manage_options',
             self::MENU_SLUG,
             array($this, 'render_main_page')
+        );
+        
+        add_submenu_page(
+            self::MENU_SLUG,
+            'Personalización del Tema',
+            'Personalizar Tema',
+            'manage_options',
+            self::MENU_SLUG . '-theme-styles',
+            array($this, 'render_theme_styles_page')
         );
         
         add_submenu_page(
@@ -83,5 +98,19 @@ class Vortex_Admin_Page {
         
         // Incluir la plantilla de la página
         include VORTEX_UI_PANEL_PATH . 'admin/settings.php';
+    }
+    
+    /**
+     * Renderiza la página del personalizador de estilos del tema
+     */
+    public function render_theme_styles_page() {
+        // Verificar que el personalizador está inicializado
+        if (!$this->theme_customizer) {
+            echo '<div class="notice notice-error"><p>Error: El personalizador de estilos no está disponible.</p></div>';
+            return;
+        }
+        
+        // Incluir la plantilla de la página
+        include VORTEX_UI_PANEL_PATH . 'admin/theme-styles.php';
     }
 }
