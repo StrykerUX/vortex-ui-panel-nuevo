@@ -14,6 +14,7 @@ if (!defined('WPINC')) {
 $custom_variables = $this->theme_customizer->get_custom_variables();
 $variable_categories = $this->theme_customizer->get_variable_categories();
 $available_fonts = $this->theme_customizer->get_available_fonts();
+$default_variables = $this->theme_customizer->get_default_variables();
 ?>
 
 <div class="wrap vortex-ui-panel-wrap">
@@ -96,7 +97,7 @@ $available_fonts = $this->theme_customizer->get_available_fonts();
                                                        name="variables[<?php echo esc_attr($var_name); ?>]" 
                                                        value="<?php echo esc_attr($custom_variables[$var_name]); ?>" 
                                                        class="vortex-color-picker"
-                                                       data-default-color="<?php echo esc_attr($this->theme_customizer->default_variables[$var_name]); ?>" />
+                                                       data-default-color="<?php echo esc_attr($default_variables[$var_name]); ?>" />
                                             
                                             <?php elseif (strpos($var_name, 'font-family') !== false) : ?>
                                                 <!-- Control para fuentes -->
@@ -120,7 +121,7 @@ $available_fonts = $this->theme_customizer->get_available_fonts();
                                             <?php endif; ?>
                                             
                                             <p class="description">
-                                                Valor por defecto: <code><?php echo esc_html($this->theme_customizer->default_variables[$var_name]); ?></code>
+                                                Valor por defecto: <code><?php echo esc_html($default_variables[$var_name]); ?></code>
                                             </p>
                                         </div>
                                     <?php endforeach; ?>
