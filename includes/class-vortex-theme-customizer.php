@@ -76,12 +76,23 @@ class Vortex_Theme_Customizer {
         'button-3d-offset' => '4px',
         'button-3d-hover-offset' => '3px',
         'button-3d-transition' => '0.1s ease-out',
+        
+        // Variable para controlar el estilo de diseño
+        'ui-style' => 'modern',
     );
     
     /**
      * Categorías de variables
      */
     private $variable_categories = array(
+        'design_style' => array(
+            'title' => 'Estilo de Diseño',
+            'icon' => 'ti-brush',
+            'variables' => array(
+                'ui-style' => 'Estilo de interfaz',
+            ),
+            'description' => 'Selecciona el estilo visual base para tu interfaz',
+        ),
         'colors' => array(
             'title' => 'Colores Principales',
             'icon' => 'ti-palette',
@@ -168,6 +179,17 @@ class Vortex_Theme_Customizer {
     );
     
     /**
+     * Estilos de diseño disponibles
+     */
+    private $design_styles = array(
+        'modern' => 'Moderno',
+        'minimalist' => 'Minimalista',
+        'neo-brutalism' => 'Neo Brutalismo',
+        'bold' => 'Audaz',
+        'enterprise' => 'Empresarial',
+    );
+    
+    /**
      * Fuentes disponibles
      */
     private $available_fonts = array(
@@ -195,6 +217,7 @@ class Vortex_Theme_Customizer {
                 'bs-secondary' => '#8B5CF6',
                 'button-border-radius' => '8px',
                 'button-3d-offset' => '4px',
+                'ui-style' => 'modern',
             )
         ),
         'minimal' => array(
@@ -205,6 +228,24 @@ class Vortex_Theme_Customizer {
                 'bs-secondary' => '#3B82F6',
                 'button-border-radius' => '4px',
                 'button-3d-offset' => '3px',
+                'ui-style' => 'minimalist',
+            )
+        ),
+        'neo-brutalism' => array(
+            'name' => 'Neo Brutalismo',
+            'description' => 'Estilo Neo Brutalismo con bordes marcados, sombras rectangulares y colores vibrantes',
+            'variables' => array(
+                'bs-primary' => '#FF596A',
+                'bs-secondary' => '#8B5CF6',
+                'bs-success' => '#10B981',
+                'bs-info' => '#3B82F6',
+                'bs-warning' => '#FBBF24',
+                'bs-danger' => '#EF4444',
+                'card-border-radius' => '12px',
+                'button-border-radius' => '8px',
+                'button-3d-offset' => '8px',
+                'button-3d-hover-offset' => '4px',
+                'ui-style' => 'neo-brutalism',
             )
         ),
         'bold' => array(
@@ -215,6 +256,7 @@ class Vortex_Theme_Customizer {
                 'bs-secondary' => '#EC4899',
                 'button-border-radius' => '6px',
                 'button-3d-offset' => '6px',
+                'ui-style' => 'bold',
             )
         ),
         'enterprise' => array(
@@ -225,6 +267,7 @@ class Vortex_Theme_Customizer {
                 'bs-secondary' => '#475569',
                 'button-border-radius' => '3px',
                 'button-3d-offset' => '3px',
+                'ui-style' => 'enterprise',
             )
         ),
     );
@@ -240,6 +283,9 @@ class Vortex_Theme_Customizer {
         add_action('wp_ajax_vortex_reset_theme_styles', array($this, 'ajax_reset_theme_styles'));
         add_action('wp_ajax_vortex_apply_preset', array($this, 'ajax_apply_preset'));
         add_action('wp_ajax_vortex_generate_color_variants', array($this, 'ajax_generate_color_variants'));
+        
+        // Agregar un indicador de estilo en el frontend
+        add_action('wp_footer', array($this, 'add_style_indicator'));
     }
     
     /**
@@ -250,6 +296,167 @@ class Vortex_Theme_Customizer {
             self::$instance = new self();
         }
         return self::$instance;
+    }
+    
+    /**
+     * Agrega un indicador de estilo en el frontend
+     */
+    public function add_style_indicator() {
+        // Solo mostrar si el usuario tiene permisos
+        if (!current_user_can('manage_options')) {
+            return;
+        }
+        
+        $custom_variables = get_option('vortex_theme_custom_variables', array());
+        $current_style = isset($custom_variables['ui-style']) ? $custom_variables['ui-style'] : $this->default_variables['ui-style'];
+        $style_name = isset($this->design_styles[$current_style]) ? $this->design_styles[$current_style] : 'Moderno';
+        
+        // Estilos CSS para el indicador
+        echo '<style>
+            #theme-style-indicator {
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background-color: var(--bs-primary, #4F46E5);
+                color: white;
+                padding: 8px 15px;
+                border-radius: 30px;
+                font-size: 14px;
+                z-index: 9999;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+                display: flex;
+                align-items: center;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                border: 2px solid var(--bs-dark, #111827);
+            }
+            .theme-style-icon {
+                margin-right: 8px;
+                font-size: 18px;
+            }
+            #theme-style-indicator:hover {
+                transform: translateY(-5px);
+            }
+            #theme-style-selector {
+                position: fixed;
+                bottom: 70px;
+                right: 20px;
+                background-color: white;
+                border-radius: 8px;
+                padding: 15px;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+                z-index: 9999;
+                width: 250px;
+                display: none;
+                border: 2px solid var(--bs-dark, #111827);
+            }
+            #theme-style-selector h4 {
+                margin-top: 0;
+                margin-bottom: 10px;
+                font-size: 16px;
+                font-weight: 600;
+                color: var(--bs-dark, #111827);
+            }
+            .style-option {
+                display: flex;
+                align-items: center;
+                padding: 8px 10px;
+                margin-bottom: 5px;
+                border-radius: 4px;
+                cursor: pointer;
+                transition: background-color 0.2s ease;
+            }
+            .style-option:hover {
+                background-color: #f5f5f5;
+            }
+            .style-option.active {
+                background-color: var(--bs-primary-light, #7A74EE);
+                color: white;
+            }
+            .style-option-icon {
+                margin-right: 10px;
+                font-size: 16px;
+            }
+            .style-option-name {
+                font-size: 14px;
+                font-weight: 500;
+            }
+            @media (max-width: 768px) {
+                #theme-style-indicator {
+                    bottom: 10px;
+                    right: 10px;
+                    padding: 5px 10px;
+                    font-size: 12px;
+                }
+                #theme-style-selector {
+                    bottom: 50px;
+                    right: 10px;
+                    width: 200px;
+                }
+            }
+        </style>';
+        
+        // HTML para el indicador y selector
+        echo '<div id="theme-style-indicator">
+            <i class="ti ti-brush theme-style-icon"></i>
+            <span class="theme-style-name">Estilo: ' . esc_html($style_name) . '</span>
+        </div>';
+        
+        echo '<div id="theme-style-selector">
+            <h4>Seleccionar Estilo</h4>';
+            
+        foreach ($this->design_styles as $style_key => $style_label) {
+            $is_active = ($style_key === $current_style) ? ' active' : '';
+            echo '<div class="style-option' . $is_active . '" data-style="' . esc_attr($style_key) . '">
+                <i class="ti ti-check style-option-icon"></i>
+                <span class="style-option-name">' . esc_html($style_label) . '</span>
+            </div>';
+        }
+            
+        echo '</div>';
+        
+        // JavaScript para el selector
+        echo '<script>
+            document.addEventListener("DOMContentLoaded", function() {
+                var indicator = document.getElementById("theme-style-indicator");
+                var selector = document.getElementById("theme-style-selector");
+                var styleOptions = document.querySelectorAll(".style-option");
+                var isOpen = false;
+                
+                // Función para mostrar/ocultar el selector
+                indicator.addEventListener("click", function() {
+                    isOpen = !isOpen;
+                    selector.style.display = isOpen ? "block" : "none";
+                });
+                
+                // Ocultar selector al hacer clic fuera
+                document.addEventListener("click", function(event) {
+                    var isClickInside = indicator.contains(event.target) || selector.contains(event.target);
+                    if (!isClickInside && isOpen) {
+                        isOpen = false;
+                        selector.style.display = "none";
+                    }
+                });
+                
+                // Cambiar estilo al hacer clic en una opción
+                styleOptions.forEach(function(option) {
+                    option.addEventListener("click", function() {
+                        var style = this.getAttribute("data-style");
+                        
+                        // Llamar a Ajax para aplicar preset
+                        var xhr = new XMLHttpRequest();
+                        xhr.open("POST", "' . admin_url('admin-ajax.php') . '", true);
+                        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                        xhr.onreadystatechange = function() {
+                            if (xhr.readyState === 4 && xhr.status === 200) {
+                                location.reload();
+                            }
+                        };
+                        xhr.send("action=vortex_apply_preset&preset=" + style + "&nonce=' . wp_create_nonce('vortex_theme_customizer_nonce') . '");
+                    });
+                });
+            });
+        </script>';
     }
     
     /**
@@ -266,6 +473,46 @@ class Vortex_Theme_Customizer {
         
         // Encolar fuentes de Google si son necesarias
         $this->enqueue_google_fonts();
+        
+        // Cargar el estilo UI específico
+        $this->enqueue_ui_style();
+    }
+    
+    /**
+     * Cargar el estilo UI específico basado en la configuración
+     */
+    public function enqueue_ui_style() {
+        $custom_variables = get_option('vortex_theme_custom_variables', array());
+        $current_style = isset($custom_variables['ui-style']) ? $custom_variables['ui-style'] : $this->default_variables['ui-style'];
+        
+        // Cargar estilos específicos para Neo Brutalism
+        if ($current_style === 'neo-brutalism') {
+            // Enqueue los estilos Neo Brutalism
+            wp_enqueue_style('vortex-neo-brutalism', VORTEX_UI_PANEL_URL . 'assets/css/neo-brutalism-panel.css', array(), VORTEX_UI_PANEL_VERSION);
+            wp_enqueue_script('vortex-neo-brutalism-script', VORTEX_UI_PANEL_URL . 'assets/js/neo-brutalism.js', array('jquery'), VORTEX_UI_PANEL_VERSION, true);
+            
+            // Agregar clase al body
+            add_filter('body_class', function($classes) {
+                $classes[] = 'neo-brutalism-style';
+                return $classes;
+            });
+        }
+        
+        // Cargar estilos específicos para Minimalista
+        else if ($current_style === 'minimalist') {
+            wp_enqueue_style('vortex-minimalist', VORTEX_UI_PANEL_URL . 'assets/css/minimalist.css', array(), VORTEX_UI_PANEL_VERSION);
+            
+            add_filter('body_class', function($classes) {
+                $classes[] = 'minimalist-style';
+                return $classes;
+            });
+        }
+        
+        // Agregar clase general para el estilo actual
+        add_filter('body_class', function($classes) use ($current_style) {
+            $classes[] = 'ui-style-' . $current_style;
+            return $classes;
+        });
     }
     
     /**
@@ -700,6 +947,7 @@ class Vortex_Theme_Customizer {
             'ajaxUrl' => admin_url('admin-ajax.php'),
             'nonce' => wp_create_nonce('vortex_theme_customizer_nonce'),
             'presets' => $this->available_presets,
+            'designStyles' => $this->design_styles,
         ));
     }
     
@@ -891,6 +1139,13 @@ class Vortex_Theme_Customizer {
      */
     public function get_available_presets() {
         return $this->available_presets;
+    }
+    
+    /**
+     * Obtener estilos de diseño disponibles
+     */
+    public function get_design_styles() {
+        return $this->design_styles;
     }
     
     /**
