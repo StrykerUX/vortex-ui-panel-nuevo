@@ -37,6 +37,7 @@ require_once VORTEX_UI_PANEL_PATH . 'includes/class-vortex-admin-page.php';
 require_once VORTEX_UI_PANEL_PATH . 'includes/class-vortex-sidebar-renderer.php';
 require_once VORTEX_UI_PANEL_PATH . 'includes/class-vortex-tabler-icons.php';
 require_once VORTEX_UI_PANEL_PATH . 'includes/class-vortex-theme-customizer.php';
+require_once VORTEX_UI_PANEL_PATH . 'includes/class-vortex-styles-demo.php';
 
 /**
  * Clase principal del plugin
@@ -149,11 +150,29 @@ class Vortex_UI_Panel {
         // Cargar iconos de Tabler en el frontend
         Vortex_Tabler_Icons::enqueue_icons();
         
-        // Cargar estilos Neo Brutalism para el panel
-        wp_enqueue_style('vortex-neo-brutalism', VORTEX_UI_PANEL_URL . 'assets/css/neo-brutalism-panel.css', array(), VORTEX_UI_PANEL_VERSION);
+        // Obtener el estilo de UI actual
+        $custom_variables = get_option('vortex_theme_custom_variables', array());
+        $current_style = isset($custom_variables['ui-style']) ? $custom_variables['ui-style'] : 'modern';
         
-        // Cargar script para aplicar estilos Neo Brutalism
-        wp_enqueue_script('vortex-neo-brutalism-script', VORTEX_UI_PANEL_URL . 'assets/js/neo-brutalism.js', array('jquery'), VORTEX_UI_PANEL_VERSION, true);
+        // Cargar estilos específicos según el estilo seleccionado
+        switch ($current_style) {
+            case 'neo-brutalism':
+                wp_enqueue_style('vortex-neo-brutalism', VORTEX_UI_PANEL_URL . 'assets/css/neo-brutalism-panel.css', array(), VORTEX_UI_PANEL_VERSION);
+                wp_enqueue_script('vortex-neo-brutalism-script', VORTEX_UI_PANEL_URL . 'assets/js/neo-brutalism.js', array('jquery'), VORTEX_UI_PANEL_VERSION, true);
+                break;
+                
+            case 'minimalist':
+                wp_enqueue_style('vortex-minimalist', VORTEX_UI_PANEL_URL . 'assets/css/minimalist.css', array(), VORTEX_UI_PANEL_VERSION);
+                break;
+                
+            // Otros estilos pueden ser agregados aquí
+        }
+        
+        // Agregar clase del estilo actual al body
+        add_filter('body_class', function($classes) use ($current_style) {
+            $classes[] = 'ui-style-' . $current_style;
+            return $classes;
+        });
     }
     
     /**
