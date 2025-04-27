@@ -148,6 +148,12 @@ class Vortex_UI_Panel {
     public function enqueue_frontend_styles() {
         // Cargar iconos de Tabler en el frontend
         Vortex_Tabler_Icons::enqueue_icons();
+        
+        // Cargar estilos Neo Brutalism para el panel
+        wp_enqueue_style('vortex-neo-brutalism', VORTEX_UI_PANEL_URL . 'assets/css/neo-brutalism-panel.css', array(), VORTEX_UI_PANEL_VERSION);
+        
+        // Cargar script para aplicar estilos Neo Brutalism
+        wp_enqueue_script('vortex-neo-brutalism-script', VORTEX_UI_PANEL_URL . 'assets/js/neo-brutalism.js', array('jquery'), VORTEX_UI_PANEL_VERSION, true);
     }
     
     /**
