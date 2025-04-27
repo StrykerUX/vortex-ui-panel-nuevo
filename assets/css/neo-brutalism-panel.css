@@ -1,0 +1,495 @@
+/**
+ * Vortex UI Panel - Neo Brutalism Style
+ * Estilos personalizados para implementar el estilo Neo-Brutalismo Suave en el panel de control.
+ */
+
+/* Variables Neo Brutalism */
+.vortex-preview-dashboard {
+    /* Colores principales */
+    --preview-primary-color: #FF596A;
+    --preview-primary-light: #FF7A8A;
+    --preview-primary-dark: #E63E50;
+    
+    --preview-secondary-color: #8B5CF6;
+    --preview-secondary-light: #A78BFA;
+    --preview-secondary-dark: #7C3AED;
+    
+    --preview-success-color: #10B981;
+    --preview-success-light: #34D399;
+    --preview-success-dark: #059669;
+    
+    --preview-danger-color: #EF4444;
+    --preview-danger-light: #F87171;
+    --preview-danger-dark: #DC2626;
+    
+    --preview-warning-color: #FBBF24;
+    --preview-warning-light: #FCD34D;
+    --preview-warning-dark: #D97706;
+    
+    --preview-info-color: #3B82F6;
+    --preview-info-light: #60A5FA;
+    --preview-info-dark: #2563EB;
+    
+    /* Tema claro */
+    --preview-bg-color: #F4F6F8;
+    --preview-card-bg: #FFFFFF;
+    --preview-sidebar-bg: #101828;
+    --preview-sidebar-color: #E5E7EB;
+    --preview-sidebar-hover: rgba(255, 255, 255, 0.1);
+    --preview-sidebar-active-bg: #FF596A;
+    --preview-sidebar-active-color: #FFFFFF;
+    --preview-topbar-bg: #FFFFFF;
+    --preview-topbar-color: #111827;
+    --preview-border-color: #111827;
+    --preview-text-primary: #111827;
+    --preview-text-secondary: #6B7280;
+    
+    /* Neo Brutalism effects */
+    --preview-neo-shadow-sm: 3px 3px 0px rgba(0, 0, 0, 0.2);
+    --preview-neo-shadow: 5px 5px 0px rgba(0, 0, 0, 0.2);
+    --preview-neo-shadow-lg: 8px 8px 0px rgba(0, 0, 0, 0.2);
+    --preview-button-border-radius: 8px;
+    --preview-card-border-radius: 12px;
+}
+
+/* Tema oscuro */
+.vortex-preview-dashboard.dark-mode {
+    --preview-bg-color: #121212;
+    --preview-card-bg: #1E1E1E;
+    --preview-sidebar-bg: #0A0A0A;
+    --preview-sidebar-color: #E5E7EB;
+    --preview-sidebar-hover: rgba(255, 255, 255, 0.1);
+    --preview-sidebar-active-bg: #FF596A;
+    --preview-sidebar-active-color: #FFFFFF;
+    --preview-topbar-bg: #1E1E1E;
+    --preview-topbar-color: #F9FAFB;
+    --preview-border-color: rgba(255, 255, 255, 0.3);
+    --preview-text-primary: #F9FAFB;
+    --preview-text-secondary: #9CA3AF;
+    
+    /* Neo Brutalism shadows for dark mode */
+    --preview-neo-shadow-sm: 3px 3px 0px rgba(255, 255, 255, 0.1);
+    --preview-neo-shadow: 5px 5px 0px rgba(255, 255, 255, 0.1);
+    --preview-neo-shadow-lg: 8px 8px 0px rgba(255, 255, 255, 0.1);
+}
+
+/* Dashboard container */
+.vortex-preview-dashboard {
+    border-radius: var(--preview-card-border-radius);
+    border: 2px solid var(--preview-border-color);
+    box-shadow: var(--preview-neo-shadow);
+    overflow: hidden;
+}
+
+/* Sidebar styling */
+.vortex-preview-sidebar {
+    border-right: 2px solid var(--preview-border-color);
+}
+
+/* Menu items */
+.vortex-preview-menu-item {
+    margin: 5px 10px;
+    border-radius: var(--preview-button-border-radius);
+    transition: all 0.2s ease;
+}
+
+.vortex-preview-menu-item:hover {
+    transform: translateX(5px);
+}
+
+.vortex-preview-menu-item.active {
+    background-color: var(--preview-sidebar-active-bg);
+    color: var(--preview-sidebar-active-color);
+    box-shadow: var(--preview-neo-shadow-sm);
+    border: none;
+}
+
+/* Remove the side indicator for active menu items and use full background */
+.vortex-preview-menu-item.active::before {
+    display: none;
+}
+
+/* Topbar */
+.vortex-preview-topbar {
+    border-bottom: 2px solid var(--preview-border-color);
+    box-shadow: var(--preview-neo-shadow-sm);
+}
+
+/* Search bar */
+.vortex-preview-search {
+    border: 2px solid var(--preview-border-color);
+    border-radius: var(--preview-button-border-radius);
+    box-shadow: var(--preview-neo-shadow-sm);
+    transition: all 0.2s ease;
+}
+
+.vortex-preview-search:focus-within {
+    transform: translateY(-2px);
+    box-shadow: var(--preview-neo-shadow);
+}
+
+/* Buttons styling */
+.vortex-preview-button {
+    border: 2px solid var(--preview-border-color);
+    border-radius: var(--preview-button-border-radius);
+    font-weight: 600;
+    box-shadow: var(--preview-neo-shadow-sm);
+    transition: all 0.2s ease;
+}
+
+.vortex-preview-button:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--preview-neo-shadow);
+}
+
+.vortex-preview-button.primary {
+    background-color: var(--preview-primary-color);
+    border-color: var(--preview-border-color);
+}
+
+/* Icon buttons */
+.vortex-preview-icon-button {
+    border: 1px solid var(--preview-border-color);
+    box-shadow: var(--preview-neo-shadow-sm);
+    transition: all 0.2s ease;
+}
+
+.vortex-preview-icon-button:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--preview-neo-shadow);
+}
+
+/* Stats cards */
+.vortex-preview-stat-card {
+    border: 2px solid var(--preview-border-color);
+    border-radius: var(--preview-card-border-radius);
+    box-shadow: var(--preview-neo-shadow);
+    transition: all 0.2s ease;
+}
+
+.vortex-preview-stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--preview-neo-shadow-lg);
+}
+
+/* Chart cards */
+.vortex-preview-card {
+    border: 2px solid var(--preview-border-color);
+    border-radius: var(--preview-card-border-radius);
+    box-shadow: var(--preview-neo-shadow);
+    transition: all 0.2s ease;
+}
+
+.vortex-preview-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--preview-neo-shadow-lg);
+}
+
+.vortex-preview-card-header {
+    border-bottom: 2px solid var(--preview-border-color);
+}
+
+/* Tables */
+.vortex-preview-table th {
+    font-weight: 600;
+    color: var(--preview-text-primary);
+}
+
+.vortex-preview-table td {
+    border-bottom: 1px solid rgba(var(--preview-border-color), 0.2);
+}
+
+/* Activity items */
+.vortex-preview-activity-item {
+    border-bottom: 1px solid rgba(var(--preview-border-color), 0.2);
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+.vortex-preview-activity-icon {
+    border: 1px solid var(--preview-border-color);
+    box-shadow: var(--preview-neo-shadow-sm);
+}
+
+/* Alerts */
+.vortex-preview-dashboard .alert {
+    border: 2px solid var(--preview-border-color);
+    border-radius: var(--preview-card-border-radius);
+    box-shadow: var(--preview-neo-shadow-sm);
+}
+
+/* 3D Buttons specific to Neo Brutalism */
+.vortex-preview-dashboard .btn-3d-wrapper {
+    margin-bottom: 8px;
+}
+
+.vortex-preview-dashboard .btn-3d-back {
+    border: 2px solid var(--preview-border-color);
+    border-radius: var(--preview-button-border-radius);
+}
+
+.vortex-preview-dashboard .btn-3d {
+    border: 2px solid var(--preview-border-color);
+    border-radius: var(--preview-button-border-radius);
+    font-weight: 600;
+}
+
+/* Chat AI Section - Simulate the reference images */
+.vortex-preview-chat-container {
+    border: 2px solid var(--preview-border-color);
+    border-radius: var(--preview-card-border-radius);
+    box-shadow: var(--preview-neo-shadow);
+    padding: 0;
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+.vortex-preview-chat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 2px solid var(--preview-border-color);
+    background-color: var(--preview-card-bg);
+}
+
+.vortex-preview-chat-title {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+}
+
+.vortex-preview-chat-title .status {
+    margin-left: 10px;
+    padding: 2px 8px;
+    background-color: #E0F2FE;
+    color: #0284C7;
+    font-size: 0.7rem;
+    border-radius: 4px;
+    font-weight: 500;
+}
+
+.vortex-preview-chat-body {
+    padding: 15px;
+    background-color: var(--preview-card-bg);
+}
+
+.vortex-preview-message {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: flex-start;
+}
+
+.vortex-preview-message-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    margin-right: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 500;
+}
+
+.vortex-preview-message-avatar.ai {
+    background-color: #10B981;
+}
+
+.vortex-preview-message-avatar.user {
+    background-color: #FF596A;
+}
+
+.vortex-preview-message-content {
+    background-color: #F9FAFB;
+    padding: 12px 15px;
+    border-radius: 8px;
+    border: 1px solid #E5E7EB;
+    max-width: 80%;
+}
+
+.vortex-preview-chat-input-container {
+    padding: 15px;
+    border-top: 1px solid var(--preview-border-color);
+    display: flex;
+    background-color: var(--preview-card-bg);
+}
+
+.vortex-preview-chat-input {
+    flex: 1;
+    border: 2px solid var(--preview-border-color);
+    border-radius: var(--preview-button-border-radius);
+    padding: 10px 15px;
+    margin-right: 10px;
+    box-shadow: var(--preview-neo-shadow-sm);
+}
+
+.vortex-preview-chat-send {
+    background-color: var(--preview-primary-color);
+    color: white;
+    border: 2px solid var(--preview-border-color);
+    border-radius: var(--preview-button-border-radius);
+    padding: 8px 15px;
+    font-weight: 600;
+    box-shadow: var(--preview-neo-shadow-sm);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.vortex-preview-chat-tokens {
+    font-size: 0.8rem;
+    color: var(--preview-text-secondary);
+    padding: 0 15px 15px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.vortex-preview-chat-view-all {
+    color: var(--preview-primary-color);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+/* Quick Links Neo Brutalism */
+.vortex-preview-quick-links {
+    border: 2px solid var(--preview-border-color);
+    border-radius: var(--preview-card-border-radius);
+    box-shadow: var(--preview-neo-shadow);
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.vortex-preview-quick-links-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 2px solid var(--preview-border-color);
+    background-color: var(--preview-card-bg);
+}
+
+.vortex-preview-quick-links-title {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+}
+
+.vortex-preview-quick-links-icon {
+    margin-right: 10px;
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    background-color: #FEF3C7;
+    color: #D97706;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+}
+
+.vortex-preview-quick-links-body {
+    padding: 0;
+    background-color: var(--preview-card-bg);
+}
+
+.vortex-preview-quick-link {
+    padding: 15px 20px;
+    border-bottom: 1px solid #E5E7EB;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.2s ease;
+}
+
+.vortex-preview-quick-link:hover {
+    background-color: #F9FAFB;
+}
+
+.vortex-preview-quick-link-name {
+    font-weight: 500;
+}
+
+.vortex-preview-quick-link-views {
+    font-size: 0.875rem;
+    color: var(--preview-text-secondary);
+}
+
+.vortex-preview-quick-link-edit {
+    padding: 5px 10px;
+    background-color: #F9FAFB;
+    border: 1px solid #E5E7EB;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+}
+
+.vortex-preview-quick-link-edit:hover {
+    background-color: #F3F4F6;
+}
+
+.vortex-preview-view-all-link {
+    display: block;
+    text-align: center;
+    padding: 12px;
+    color: var(--preview-primary-color);
+    text-decoration: none;
+    font-weight: 500;
+    border-top: 1px solid #E5E7EB;
+}
+
+.vortex-preview-view-all-link:hover {
+    background-color: #F9FAFB;
+}
+
+/* User avatar and dropdown */
+.vortex-preview-user {
+    border: 1px solid var(--preview-border-color);
+    border-radius: var(--preview-button-border-radius);
+    box-shadow: var(--preview-neo-shadow-sm);
+    transition: all 0.2s ease;
+}
+
+.vortex-preview-user:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--preview-neo-shadow);
+}
+
+.vortex-preview-avatar {
+    background-color: var(--preview-primary-color);
+    border: 1px solid var(--preview-border-color);
+}
+
+/* Export and New Report buttons */
+.vortex-preview-export-button, 
+.vortex-preview-new-report-button {
+    border: 2px solid var(--preview-border-color);
+    border-radius: var(--preview-button-border-radius);
+    box-shadow: var(--preview-neo-shadow-sm);
+    padding: 8px 16px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.vortex-preview-export-button {
+    background-color: white;
+    color: var(--preview-text-primary);
+}
+
+.vortex-preview-new-report-button {
+    background-color: var(--preview-primary-color);
+    color: white;
+}
+
+.vortex-preview-export-button:hover,
+.vortex-preview-new-report-button:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--preview-neo-shadow);
+}
