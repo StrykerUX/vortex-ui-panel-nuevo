@@ -1,0 +1,1 @@
+<!-- Archivo eliminado para restaurar el checkpoint v0.3.0-stable -->
