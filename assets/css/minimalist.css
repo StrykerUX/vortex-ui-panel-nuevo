@@ -1,0 +1,347 @@
+/**
+ * Vortex UI Panel - Minimalist Style
+ * Estilos personalizados para implementar un diseño minimalista en el panel de control.
+ */
+
+/* Variables Minimalistas */
+.minimalist-style {
+    /* Colores principales */
+    --preview-primary-color: #0EA5E9;
+    --preview-primary-light: #38BDF8;
+    --preview-primary-dark: #0284C7;
+    
+    --preview-secondary-color: #3B82F6;
+    --preview-secondary-light: #60A5FA;
+    --preview-secondary-dark: #2563EB;
+    
+    --preview-success-color: #10B981;
+    --preview-success-light: #34D399;
+    --preview-success-dark: #059669;
+    
+    --preview-danger-color: #EF4444;
+    --preview-danger-light: #F87171;
+    --preview-danger-dark: #DC2626;
+    
+    --preview-warning-color: #F59E0B;
+    --preview-warning-light: #FBBF24;
+    --preview-warning-dark: #D97706;
+    
+    --preview-info-color: #3B82F6;
+    --preview-info-light: #60A5FA;
+    --preview-info-dark: #2563EB;
+    
+    /* Tema claro */
+    --preview-bg-color: #F8FAFC;
+    --preview-card-bg: #FFFFFF;
+    --preview-border-color: #E2E8F0;
+    --preview-text-primary: #0F172A;
+    --preview-text-secondary: #64748B;
+    
+    /* Sombras y bordes */
+    --preview-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+    --preview-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    --preview-shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.05);
+    --preview-border-radius: 4px;
+    --preview-button-border-radius: 4px;
+}
+
+/* Tema oscuro */
+.minimalist-style.dark-mode {
+    --preview-bg-color: #0F172A;
+    --preview-card-bg: #1E293B;
+    --preview-border-color: #334155;
+    --preview-text-primary: #F8FAFC;
+    --preview-text-secondary: #CBD5E1;
+    
+    /* Sombras para modo oscuro */
+    --preview-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+    --preview-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    --preview-shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilos generales minimalistas */
+.minimalist-style body {
+    background-color: var(--preview-bg-color);
+    color: var(--preview-text-primary);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Cards y elementos contenedores */
+.minimalist-style .card,
+.minimalist-style .dashboard-stat,
+.minimalist-style .stat-card {
+    background-color: var(--preview-card-bg);
+    border: 1px solid var(--preview-border-color);
+    border-radius: var(--preview-border-radius);
+    box-shadow: var(--preview-shadow);
+    transition: all 0.2s ease;
+}
+
+.minimalist-style .card:hover,
+.minimalist-style .dashboard-stat:hover,
+.minimalist-style .stat-card:hover {
+    box-shadow: var(--preview-shadow-lg);
+    transform: translateY(-2px);
+}
+
+/* Botones */
+.minimalist-style .btn {
+    border-radius: var(--preview-button-border-radius);
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+    box-shadow: var(--preview-shadow-sm);
+}
+
+.minimalist-style .btn:hover {
+    box-shadow: var(--preview-shadow);
+    transform: translateY(-1px);
+}
+
+.minimalist-style .btn-primary {
+    background-color: var(--preview-primary-color);
+    color: white;
+}
+
+.minimalist-style .btn-primary:hover {
+    background-color: var(--preview-primary-dark);
+}
+
+.minimalist-style .btn-secondary {
+    background-color: var(--preview-secondary-color);
+    color: white;
+}
+
+.minimalist-style .btn-secondary:hover {
+    background-color: var(--preview-secondary-dark);
+}
+
+.minimalist-style .btn-success {
+    background-color: var(--preview-success-color);
+    color: white;
+}
+
+.minimalist-style .btn-success:hover {
+    background-color: var(--preview-success-dark);
+}
+
+.minimalist-style .btn-danger {
+    background-color: var(--preview-danger-color);
+    color: white;
+}
+
+.minimalist-style .btn-danger:hover {
+    background-color: var(--preview-danger-dark);
+}
+
+/* Menú lateral */
+.minimalist-style .sidenav-menu {
+    background-color: var(--preview-card-bg);
+    border-right: 1px solid var(--preview-border-color);
+}
+
+.minimalist-style .side-nav-link {
+    color: var(--preview-text-secondary);
+    border-radius: var(--preview-border-radius);
+    margin: 2px 10px;
+    transition: all 0.2s ease;
+}
+
+.minimalist-style .side-nav-link:hover {
+    background-color: rgba(var(--bs-primary-rgb), 0.05);
+    color: var(--preview-primary-color);
+}
+
+.minimalist-style .side-nav-link.active {
+    background-color: rgba(var(--bs-primary-rgb), 0.1);
+    color: var(--preview-primary-color);
+}
+
+/* Topbar */
+.minimalist-style .app-topbar {
+    background-color: var(--preview-card-bg);
+    border-bottom: 1px solid var(--preview-border-color);
+    box-shadow: var(--preview-shadow-sm);
+}
+
+.minimalist-style .topbar-search {
+    border: 1px solid var(--preview-border-color);
+    border-radius: var(--preview-border-radius);
+}
+
+/* Formularios */
+.minimalist-style .form-control,
+.minimalist-style .form-select {
+    border: 1px solid var(--preview-border-color);
+    border-radius: var(--preview-border-radius);
+    padding: 0.5rem 0.75rem;
+    transition: all 0.2s ease;
+}
+
+.minimalist-style .form-control:focus,
+.minimalist-style .form-select:focus {
+    border-color: var(--preview-primary-color);
+    box-shadow: 0 0 0 3px rgba(var(--bs-primary-rgb), 0.1);
+}
+
+/* Alertas */
+.minimalist-style .alert {
+    border-radius: var(--preview-border-radius);
+    border: 1px solid transparent;
+    padding: 0.75rem 1rem;
+}
+
+.minimalist-style .alert-success {
+    background-color: rgba(var(--bs-success-rgb), 0.1);
+    color: var(--preview-success-dark);
+    border-color: rgba(var(--bs-success-rgb), 0.2);
+}
+
+.minimalist-style .alert-warning {
+    background-color: rgba(var(--bs-warning-rgb), 0.1);
+    color: var(--preview-warning-dark);
+    border-color: rgba(var(--bs-warning-rgb), 0.2);
+}
+
+.minimalist-style .alert-danger {
+    background-color: rgba(var(--bs-danger-rgb), 0.1);
+    color: var(--preview-danger-dark);
+    border-color: rgba(var(--bs-danger-rgb), 0.2);
+}
+
+.minimalist-style .alert-info {
+    background-color: rgba(var(--bs-info-rgb), 0.1);
+    color: var(--preview-info-dark);
+    border-color: rgba(var(--bs-info-rgb), 0.2);
+}
+
+/* Indicadores y badges */
+.minimalist-style .badge {
+    font-weight: 500;
+    padding: 0.35em 0.65em;
+    border-radius: 10px;
+}
+
+/* Tablas */
+.minimalist-style table {
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.minimalist-style th {
+    font-weight: 600;
+    color: var(--preview-text-secondary);
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+.minimalist-style td, 
+.minimalist-style th {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--preview-border-color);
+}
+
+/* Chat UI */
+.minimalist-style .chat-ai-container {
+    border: 1px solid var(--preview-border-color);
+    border-radius: var(--preview-border-radius);
+    overflow: hidden;
+}
+
+.minimalist-style .chat-message {
+    padding: 0.75rem 1rem;
+    border-radius: var(--preview-border-radius);
+    margin: 0.5rem;
+}
+
+.minimalist-style .chat-message.ai {
+    background-color: rgba(var(--bs-primary-rgb), 0.05);
+}
+
+.minimalist-style .chat-message.user {
+    background-color: rgba(var(--bs-secondary-rgb), 0.05);
+}
+
+.minimalist-style .chat-input {
+    border: 1px solid var(--preview-border-color);
+    border-radius: var(--preview-border-radius);
+    box-shadow: var(--preview-shadow-sm);
+}
+
+.minimalist-style .chat-send-button {
+    background-color: var(--preview-primary-color);
+    color: white;
+    border-radius: var(--preview-border-radius);
+    padding: 0.5rem 1rem;
+}
+
+/* Estilo de estadísticas en el dashboard */
+.minimalist-style .stat-card-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.minimalist-style .stat-card-icon.revenue {
+    background-color: var(--preview-primary-color);
+}
+
+.minimalist-style .stat-card-icon.users {
+    background-color: var(--preview-success-color);
+}
+
+.minimalist-style .stat-card-icon.conversion {
+    background-color: var(--preview-info-color);
+}
+
+.minimalist-style .stat-trend {
+    font-size: 0.8rem;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.2rem 0.4rem;
+    border-radius: 20px;
+}
+
+.minimalist-style .stat-trend.up {
+    background-color: rgba(var(--bs-success-rgb), 0.1);
+    color: var(--preview-success-color);
+}
+
+.minimalist-style .stat-trend.down {
+    background-color: rgba(var(--bs-danger-rgb), 0.1);
+    color: var(--preview-danger-color);
+}
+
+/* Quick Links */
+.minimalist-style .quick-links-container {
+    border: 1px solid var(--preview-border-color);
+    border-radius: var(--preview-border-radius);
+    overflow: hidden;
+}
+
+.minimalist-style .quick-link-item {
+    border-bottom: 1px solid var(--preview-border-color);
+    transition: background-color 0.2s ease;
+}
+
+.minimalist-style .quick-link-item:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+.minimalist-style .edit-button {
+    background-color: transparent;
+    border: 1px solid var(--preview-border-color);
+    border-radius: var(--preview-border-radius);
+    color: var(--preview-text-secondary);
+    transition: all 0.2s ease;
+}
+
+.minimalist-style .edit-button:hover {
+    background-color: rgba(var(--bs-primary-rgb), 0.05);
+    color: var(--preview-primary-color);
+    border-color: var(--preview-primary-color);
+}
